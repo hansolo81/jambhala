@@ -25,7 +25,7 @@ public class ThirdPartyStepDefs {
     public void userIsAMaybank2UUserWithCredentialsAnd(String arg1, String arg2) throws Exception {
         mockMvc
                 .perform(post("/v1/auth/login")
-                        .content("{\"userName\":\"anakin\",\"password\":\"ihateyou\"}")
+                        .content(String.format("{\"userName\":\"%s\",\"password\":\"%s\"}", arg1, arg2))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
     }
@@ -35,8 +35,8 @@ public class ThirdPartyStepDefs {
         mockMvc
                 .perform(get(String.format("/v1/accounts/%s", "anakin")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accounts[0].accountNumber").value("6666666"))
-                .andExpect(jsonPath("$.accounts[0].accountBalance").value("10001"));
+                .andExpect(jsonPath("$.accounts[0].accountNumber").value(arg0))
+                .andExpect(jsonPath("$.accounts[0].accountBalance").value(arg1));
     }
 
     @When("user transfers {int} to account number {string}")
