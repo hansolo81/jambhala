@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "src/test/resources/features/thirdparty/",
-        plugin = {"pretty", "html:target/cucumber-html-report.htm"},
+        plugin = {"pretty", "html:target/cucumber-html-report.html"},
         glue = {"id.co.maybank.jambhala.config", "id.co.maybank.jambhala.steps"})
 public class ThirdPartyIntegrationTest {
 }

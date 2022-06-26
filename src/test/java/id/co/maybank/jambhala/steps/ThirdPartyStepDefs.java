@@ -5,16 +5,38 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.math.BigDecimal;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ThirdPartyStepDefs {
+
+    @Autowired
+    private MockMvc mockMvc;
+
     @Given("user is a Maybank2u user with credentials {string} and {string}")
-    public void userIsAMaybankUUserWithCredentialsAnd(String arg1, String arg2) {
-        throw new PendingException();
+    public void userIsAMaybank2UUserWithCredentialsAnd(String arg1, String arg2) throws Exception {
+        mockMvc
+                .perform(post("/v1/auth/login")
+                        .content("{\"userName\":\"anakin\",\"password\":\"ihateyou\"}")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
     }
 
-    @And("user has a valid account number {string} with balance of {int}")
-    public void userHasAValidAccountNumberWithSufficientBalance(String arg0) {
-        throw new PendingException();
+    @And("user has a valid account number {string} with balance of {bigdecimal}")
+    public void userHasAValidAccountNumberWithSufficientBalance(String arg0, BigDecimal arg1) throws Exception {
+        mockMvc
+                .perform(get(String.format("/v1/accounts/%s", "anakin")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accounts[0].accountNumber").value("6666666"))
+                .andExpect(jsonPath("$.accounts[0].accountBalance").value("10001"));
     }
 
     @When("user transfers {int} to account number {string}")
