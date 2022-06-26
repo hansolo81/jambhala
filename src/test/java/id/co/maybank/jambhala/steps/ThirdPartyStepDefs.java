@@ -12,13 +12,8 @@ public class ThirdPartyStepDefs {
         throw new PendingException();
     }
 
-    @And("user has a valid account number {string}")
-    public void userHasAValidAccountNumber(String arg0) {
-        throw new PendingException();
-    }
-
-    @And("account {string} has balance of {int}")
-    public void accountHasBalanceOf(String arg0, int arg1) {
+    @And("user has a valid account number {string} with balance of {int}")
+    public void userHasAValidAccountNumberWithSufficientBalance(String arg0) {
         throw new PendingException();
     }
 
