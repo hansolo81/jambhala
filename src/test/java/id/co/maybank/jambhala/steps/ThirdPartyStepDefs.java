@@ -1,5 +1,6 @@
 package id.co.maybank.jambhala.steps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -25,13 +26,13 @@ public class ThirdPartyStepDefs {
 
     private String accessToken;
 
-    @Given("user is a Maybank2u user with credentials {string} and {string}")
+    @Given("I am a Maybank2u user with credentials {string} and {string}")
     public void userIsAMaybankUUserWithCredentialsAnd(String arg1, String arg2) {
         accessToken = keyCloak.getToken(arg1, arg2, "jambhala");
         assertThat(accessToken).isNotBlank();
     }
 
-    @And("user has a valid account number {string} with balance of {bigdecimal}")
+    @And("I have a valid account number {string} with balance of {bigdecimal}")
     public void userHasAValidAccountNumberWithSufficientBalance(String accountNumber, BigDecimal amount) {
         try {
             mockMvc.perform(get(String.format("/v1/accounts/%s/balance-inquiry", accountNumber))
@@ -44,13 +45,22 @@ public class ThirdPartyStepDefs {
         }
     }
 
-    @When("user transfers {int} to account number {string}")
-    public void userTransfersToAccountNumber(int arg0, String arg1) {
+    @When("I transfer {bigdecimal} to account number {string} that belongs to {string}")
+    public void userTransfersToAccountNumber(BigDecimal arg0, String arg1, String arg2) {
         throw new PendingException();
     }
 
-    @Then("the customer should receive a message saying Your fund transfer of {int} to {string} is successful")
-    public void theCustomerShouldReceiveAMessageSayingYourFundTransferOfToIsSuccessful(int arg0, String arg1) {
+    @Then("I should receive a message saying Your fund transfer of {bigdecimal} to {string} is successful")
+    public void theCustomerShouldReceiveAMessageSayingYourFundTransferOfToIsSuccessful(BigDecimal arg0, String arg1) {
         throw new PendingException();
+    }
+
+    @And("my available balance for account number {string} is now {double}")
+    public void myAvailableBalanceForAccountNumberIsNow(String arg0, int arg1, int arg2) {
+        
+    }
+
+    @And("my transaction history for account number {string} reads like below")
+    public void myTransactionHistoryForAccountNumberReadsLikeBelow(String arg0, DataTable dataTable) {
     }
 }
