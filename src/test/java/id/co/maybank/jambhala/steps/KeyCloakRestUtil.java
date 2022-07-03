@@ -40,7 +40,7 @@ public class KeyCloakRestUtil {
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode jsonNode = mapper.readTree(stringResponseEntity.getBody());
-            return "Bearer " + jsonNode.get("access_token").toString();
+            return "Bearer " + jsonNode.get("access_token").asText();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
