@@ -1,6 +1,7 @@
 package id.co.maybank.jambhala.controller;
 
 import id.co.maybank.jambhala.model.AccountBalance;
+import id.co.maybank.jambhala.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,17 @@ import java.math.BigDecimal;
 public class AccountController {
     Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 
+    AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
+
     @GetMapping(value = "/{accountNumber}/balance-inquiry")
     public ResponseEntity<AccountBalance> getAccountBalance(@AuthenticationPrincipal Jwt user, @PathVariable String accountNumber)  {
-        LOGGER.debug("username is " + user.getClaimAsString("preferred_username"));
-        AccountBalance accountBalance = new AccountBalance();
-        accountBalance.setAvailableBalance(BigDecimal.valueOf(10001L));
-        return new ResponseEntity<>(accountBalance, HttpStatus.OK);
+        String username = user.getClaimAsString("preferred_username");
+        return new ResponseEntity<>(
+                accountService.getBalance(username, accountNumber),
+                HttpStatus.OK);
     }
 }
