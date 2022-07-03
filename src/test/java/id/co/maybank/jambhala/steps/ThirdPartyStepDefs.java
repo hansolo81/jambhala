@@ -6,24 +6,42 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ThirdPartyStepDefs {
     @Autowired
-    KeyCloakRestUtil keyCloak;
+    private KeyCloakRestUtil keyCloak;
 
-    String token;
+    @Autowired
+    private MockMvc mockMvc;
+
+    private String accessToken;
 
     @Given("user is a Maybank2u user with credentials {string} and {string}")
     public void userIsAMaybankUUserWithCredentialsAnd(String arg1, String arg2) {
-        token = keyCloak.getToken(arg1, arg2, "jambhala");
-        assertThat(token).isNotBlank();
+        accessToken = keyCloak.getToken(arg1, arg2, "jambhala");
+        assertThat(accessToken).isNotBlank();
     }
 
-    @And("user has a valid account number {string} with balance of {int}")
-    public void userHasAValidAccountNumberWithSufficientBalance(String arg0) {
-        throw new PendingException();
+    @And("user has a valid account number {string} with balance of {bigdecimal}")
+    public void userHasAValidAccountNumberWithSufficientBalance(String accountNumber, BigDecimal amount) {
+        try {
+            mockMvc.perform(get(String.format("/v1/accounts/%s/balance-inquiry", accountNumber))
+                            .header("Authorization", accessToken)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("availableBalance").value(amount));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @When("user transfers {int} to account number {string}")
