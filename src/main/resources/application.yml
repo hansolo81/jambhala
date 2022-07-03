@@ -1,0 +1,6 @@
+keycloak:
+  auth-server-url: http://${KEYCLOAK_HOSTNAME:localhost}:${KEYCLOAK_PORT:8080}/auth
+  realm: maybank
+  resource: jambhala
+  public-client: true
+  bearer-only: true

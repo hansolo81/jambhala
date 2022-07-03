@@ -5,11 +5,20 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ThirdPartyStepDefs {
+    @Autowired
+    KeyCloakRestUtil keyCloak;
+
+    String token;
+
     @Given("user is a Maybank2u user with credentials {string} and {string}")
     public void userIsAMaybankUUserWithCredentialsAnd(String arg1, String arg2) {
-        throw new PendingException();
+        token = keyCloak.getToken(arg1, arg2, "jambhala");
+        assertThat(token).isNotBlank();
     }
 
     @And("user has a valid account number {string} with balance of {int}")
