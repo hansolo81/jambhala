@@ -3,10 +3,7 @@ package id.co.maybank.jambhala.steps;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import id.co.maybank.jambhala.model.AccountBalance;
-import id.co.maybank.jambhala.model.AccountHolder;
-import id.co.maybank.jambhala.model.EsbAccountInfoRes;
-import id.co.maybank.jambhala.model.TransferRequest;
+import id.co.maybank.jambhala.model.*;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -128,6 +125,20 @@ public class ThirdPartyStepDefs {
     @When("I transfer {bigdecimal} from {string} to {string}")
     public void userTransfersToAccountNumber(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
         try {
+            //given
+            wiremock.stubFor(
+                    WireMock.post(urlPathEqualTo("/trx-service"))
+                            .willReturn(ok()
+                                    .withHeader("Content-Type", "application/json")
+                                    .withBody(new ObjectMapper().writeValueAsString(
+                                            EsbTrxRes.builder()
+                                                    .statusCode("0")
+                                                    .statusDescription("Success")
+                                                    .build()
+                                    )))
+            );
+
+            //when
             MvcResult result = mockMvc.perform(post("/v1/transfer/intrabank")
                             .header("Authorization", accessToken)
                             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -140,6 +151,7 @@ public class ThirdPartyStepDefs {
                             )))
                     .andExpect(status().isOk())
                     .andReturn();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

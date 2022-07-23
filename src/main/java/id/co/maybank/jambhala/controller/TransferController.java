@@ -26,7 +26,7 @@ public class TransferController {
     @PostMapping("/intrabank")
     public ResponseEntity<TransferResult> doIntrabankTransfer(@AuthenticationPrincipal Jwt jwt, TransferRequest request) {
         TransferResult transferResult = transferService.doIntrabank(jwt.getClaimAsString("pan"), request);
-        return new ResponseEntity<>(transferResult, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(transferResult, HttpStatus.OK);
     }
 
 
