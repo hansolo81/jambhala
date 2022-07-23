@@ -5,7 +5,10 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import id.co.maybank.jambhala.model.AccountBalance;
 import id.co.maybank.jambhala.model.AccountHolder;
+import id.co.maybank.jambhala.model.EsbAccountInfoRes;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -35,6 +38,16 @@ public class ThirdPartyStepDefs {
 
     private String accessToken;
 
+    @Before
+    public void init() {
+        wiremock.start();
+    }
+
+    @After
+    public void cleanup() {
+        wiremock.stop();
+    }
+
     @Given("I am a Maybank2u user with credentials {string} and {string}")
     public void userIsAMaybankUUserWithCredentialsAnd(String arg1, String arg2) {
         accessToken = keyCloak.getToken(arg1, arg2, "jambhala");
@@ -42,49 +55,68 @@ public class ThirdPartyStepDefs {
     }
 
     @And("I have a valid account number {string} with balance of {bigdecimal}")
-    public void userHasAValidAccountNumberWithSufficientBalance(String accountNumber, BigDecimal amount) {
-        AccountBalance expected = new AccountBalance("1000000066", amount);
+    public void userHasAValidAccountNumberWithSufficientBalance(String accountNumber, BigDecimal balance) {
 
         try {
-            wiremock.start();
+            //given
             wiremock.stubFor(
                     WireMock.post(urlPathEqualTo("/account-service"))
                             .willReturn(ok()
                                     .withHeader("Content-Type", "application/json")
-                                    .withBody(new ObjectMapper().writeValueAsString(expected)))
+                                    .withBody(new ObjectMapper().writeValueAsString(
+                                            EsbAccountInfoRes.builder()
+                                                    .accountNumber(accountNumber)
+                                                    .availableBalance(balance)
+                                                    .build()
+                                    )))
             );
 
+            //when
             MvcResult result = mockMvc.perform(get(String.format("/v1/accounts/%s/balance-inquiry", accountNumber))
                             .header("Authorization", accessToken)
                             .contentType(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isOk())
                     .andReturn();
 
+            //then
             AccountBalance actual = new ObjectMapper().readValue(result.getResponse().getContentAsString()
                     , AccountBalance.class);
-            assertThat(actual.getAvailableBalance()).isEqualTo(expected.getAvailableBalance());
+            assertThat(actual.getAvailableBalance()).isEqualTo(balance);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            wiremock.stop();
         }
     }
 
     @And("my wife {string} has a valid account number {string}")
     public void myWifeHasAValidAccountNumber(String accountHolderName, String accountNumber) {
-        AccountHolder expected = new AccountHolder(accountNumber, accountHolderName);
+
         try {
+            //given
+            wiremock.stubFor(
+                    WireMock.post(urlPathEqualTo("/account-service"))
+                            .willReturn(ok()
+                                    .withHeader("Content-Type", "application/json")
+                                    .withBody(new ObjectMapper().writeValueAsString(
+                                            EsbAccountInfoRes.builder()
+                                                    .accountNumber(accountNumber)
+                                                    .accountHolderName(accountHolderName)
+                                                    .build()
+                                    )))
+            );
+
+            //when
             MvcResult result = mockMvc.perform(get(String.format("/v1/accounts/%s/holder-name", accountNumber))
                             .header("Authorization", accessToken)
                             .contentType(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isOk())
                     .andReturn();
 
+            //then
             AccountHolder actual = new ObjectMapper().readValue(result.getResponse().getContentAsString(),
                     AccountHolder.class);
 
-            assertThat(actual.getHolderName()).isEqualTo(expected.getHolderName());
+            assertThat(actual.getHolderName()).isEqualTo(accountHolderName);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
