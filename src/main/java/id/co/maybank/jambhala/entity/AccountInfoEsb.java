@@ -1,6 +1,7 @@
 package id.co.maybank.jambhala.entity;
 
-import id.co.maybank.jambhala.model.AccountBalance;
+import id.co.maybank.jambhala.model.EsbAccountInfoRes;
+import id.co.maybank.jambhala.model.EsbAccountInfoReq;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -11,28 +12,26 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
-
 @Component
-public class AccountBalanceEsb {
+public class AccountInfoEsb {
 
     @Value("${esb.accountservice.url}")
     private String ESB_MAYBANK_CO_ID_ACCOUNT_SERVICE;
     RestTemplate restTemplate;
 
-    public AccountBalanceEsb(RestTemplateBuilder restTemplateBuilder) {
+    public AccountInfoEsb(RestTemplateBuilder restTemplateBuilder) {
         restTemplate = restTemplateBuilder.build();
     }
 
-    public AccountBalance getBalance(String username, String accountNumber) {
-        //TODO: implement Wiremock to stub esb calls
+    public EsbAccountInfoRes getAccountInfo(String pan, String accountNumber) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_XML_VALUE));
+        EsbAccountInfoReq req = EsbAccountInfoReq.builder().pan(pan).accountNumber(accountNumber).build();
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers);
-        ResponseEntity<AccountBalance> responseEntity = restTemplate.postForEntity(
+        ResponseEntity<EsbAccountInfoRes> responseEntity = restTemplate.postForEntity(
                 ESB_MAYBANK_CO_ID_ACCOUNT_SERVICE,
                 request,
-                AccountBalance.class);
+                EsbAccountInfoRes.class);
         return responseEntity.getBody();
     }
 }

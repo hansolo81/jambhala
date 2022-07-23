@@ -1,6 +1,7 @@
 package id.co.maybank.jambhala.controller;
 
 import id.co.maybank.jambhala.model.AccountBalance;
+import id.co.maybank.jambhala.model.AccountHolder;
 import id.co.maybank.jambhala.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +30,18 @@ public class AccountController {
 
     @GetMapping(value = "/{accountNumber}/balance-inquiry")
     public ResponseEntity<AccountBalance> getAccountBalance(@AuthenticationPrincipal Jwt user, @PathVariable String accountNumber)  {
-        String username = user.getClaimAsString("preferred_username");
+        String pan = user.getClaimAsString("pan");
         return new ResponseEntity<>(
-                accountService.getBalance(username, accountNumber),
+                accountService.getBalance(pan, accountNumber),
                 HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{accountNumber}/holder-name")
+    public ResponseEntity<AccountHolder> getAccountHolder(@AuthenticationPrincipal Jwt user, @PathVariable String accountNumber) {
+        String pan = user.getClaimAsString("pan");
+       return new ResponseEntity<>(
+               accountService.getAccountHolder(pan, accountNumber),
+               HttpStatus.OK
+       ) ;
     }
 }

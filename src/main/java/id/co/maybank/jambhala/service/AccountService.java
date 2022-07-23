@@ -1,19 +1,28 @@
 package id.co.maybank.jambhala.service;
 
-import id.co.maybank.jambhala.entity.AccountBalanceEsb;
+import id.co.maybank.jambhala.entity.AccountInfoEsb;
+import id.co.maybank.jambhala.mapper.ESBConverter;
 import id.co.maybank.jambhala.model.AccountBalance;
+import id.co.maybank.jambhala.model.AccountHolder;
+import id.co.maybank.jambhala.model.EsbAccountInfoRes;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountService {
 
-    AccountBalanceEsb accountBalanceEsb;
+    AccountInfoEsb accountInfoEsb;
 
-    public AccountService(AccountBalanceEsb accountBalanceEsb) {
-        this.accountBalanceEsb = accountBalanceEsb;
+    public AccountService(AccountInfoEsb accountInfoEsb) {
+        this.accountInfoEsb = accountInfoEsb;
     }
 
-    public AccountBalance getBalance(String username, String accountNumber) {
-        return accountBalanceEsb.getBalance(username, accountNumber);
+    public AccountBalance getBalance(String pan, String accountNumber) {
+        EsbAccountInfoRes esbBalance = accountInfoEsb.getAccountInfo(pan, accountNumber);
+        return ESBConverter.MAPPER.convertToAccountBalance(esbBalance);
+    }
+
+    public AccountHolder getAccountHolder(String pan, String accountNumber) {
+        EsbAccountInfoRes esbAccountHolder = accountInfoEsb.getAccountInfo(pan, accountNumber);
+        return ESBConverter.MAPPER.convertToAccountHolder(esbAccountHolder) ;
     }
 }
