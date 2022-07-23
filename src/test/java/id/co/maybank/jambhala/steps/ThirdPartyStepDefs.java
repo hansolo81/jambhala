@@ -6,6 +6,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import id.co.maybank.jambhala.model.AccountBalance;
 import id.co.maybank.jambhala.model.AccountHolder;
 import id.co.maybank.jambhala.model.EsbAccountInfoRes;
+import id.co.maybank.jambhala.model.TransferRequest;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -25,6 +26,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ThirdPartyStepDefs {
@@ -124,8 +126,24 @@ public class ThirdPartyStepDefs {
     }
 
     @When("I transfer {bigdecimal} from {string} to {string}")
-    public void userTransfersToAccountNumber(BigDecimal arg0, String arg1, String arg2) {
-        throw new PendingException();
+    public void userTransfersToAccountNumber(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
+        try {
+            MvcResult result = mockMvc.perform(post("/v1/transfer/intrabank")
+                            .header("Authorization", accessToken)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .content(new ObjectMapper().writeValueAsString(
+                                    TransferRequest.builder()
+                                            .fromAccountNumber(fromAccountNumber)
+                                            .toAccountNumber(toAccountNumber)
+                                            .amount(amount)
+                                            .build()
+                            )))
+                    .andExpect(status().isOk())
+                    .andReturn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Then("I should receive a message saying Your fund transfer of {bigdecimal} to {string} is successful")
