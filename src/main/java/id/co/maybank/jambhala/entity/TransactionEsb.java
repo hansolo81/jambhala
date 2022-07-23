@@ -1,7 +1,7 @@
 package id.co.maybank.jambhala.entity;
 
-import id.co.maybank.jambhala.model.EsbAccountInfoRes;
-import id.co.maybank.jambhala.model.EsbAccountInfoReq;
+import id.co.maybank.jambhala.mapper.ESBConverter;
+import id.co.maybank.jambhala.model.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -13,25 +13,25 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class AccountInfoEsb {
+public class TransactionEsb {
 
-    @Value("${esb.url.accountservice}")
-    private String esbAccountServiceUrl;
+    @Value("${esb.url.trxservice}")
+    private String esbTrxServiceUrl;
     RestTemplate restTemplate;
 
-    public AccountInfoEsb(RestTemplateBuilder restTemplateBuilder) {
+    public TransactionEsb(RestTemplateBuilder restTemplateBuilder) {
         restTemplate = restTemplateBuilder.build();
     }
 
-    public EsbAccountInfoRes getAccountInfo(String pan, String accountNumber) {
+    public EsbTrxRes doTransaction(String pan, TransferRequest transferRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_XML_VALUE));
-        EsbAccountInfoReq req = EsbAccountInfoReq.builder().pan(pan).accountNumber(accountNumber).build();
+        EsbTrxReq req = ESBConverter.MAPPER.convertToEsbTrxReq(transferRequest);
         HttpEntity<String> request = new HttpEntity<>(req.toString(), headers);
-        ResponseEntity<EsbAccountInfoRes> responseEntity = restTemplate.postForEntity(
-                esbAccountServiceUrl,
+        ResponseEntity<EsbTrxRes> responseEntity = restTemplate.postForEntity(
+                esbTrxServiceUrl,
                 request,
-                EsbAccountInfoRes.class);
+                EsbTrxRes.class);
         return responseEntity.getBody();
     }
 }

@@ -1,8 +1,10 @@
 package id.co.maybank.jambhala.model;
 
 import lombok.Builder;
+import lombok.ToString;
 
 @Builder
+@ToString
 public class EsbAccountInfoReq {
 
     private String pan;

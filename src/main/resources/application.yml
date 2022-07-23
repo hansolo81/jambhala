@@ -13,7 +13,9 @@ spring:
           issuer-uri: ${keycloak-server.uri}
 
 esb:
-  accountservice.url: http://esb.maybank.co.id:9180/account-service
+  url:
+    accountservice: http://esb.maybank.co.id:9180/account-service
+    trxservice: http://esb.maybank.co.id:9180/trx-service
 
 
 logging:

@@ -1,8 +1,6 @@
 package id.co.maybank.jambhala.mapper;
 
-import id.co.maybank.jambhala.model.AccountBalance;
-import id.co.maybank.jambhala.model.AccountHolder;
-import id.co.maybank.jambhala.model.EsbAccountInfoRes;
+import id.co.maybank.jambhala.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -15,4 +13,7 @@ public interface ESBConverter {
     @Mapping(source = "accountHolderName", target = "holderName")
     AccountHolder convertToAccountHolder(EsbAccountInfoRes esbAccountInfoRes);
 
+    EsbTrxReq convertToEsbTrxReq(TransferRequest transferRequest);
+
+    TransferResult convertToTransferResult(EsbTrxRes esbTrxRes);
 }

@@ -46,6 +46,7 @@ public class AccountServiceShould {
         assertThat(actual.getAvailableBalance()).isEqualTo(expectedBalance);
     }
 
+    @Test
     public void returnAccountHolderName() {
 
         String expectedHolderName = "padme";
