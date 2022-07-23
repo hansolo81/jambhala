@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import id.co.maybank.jambhala.model.AccountBalance;
+import id.co.maybank.jambhala.model.AccountHolder;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
@@ -42,9 +43,10 @@ public class ThirdPartyStepDefs {
 
     @And("I have a valid account number {string} with balance of {bigdecimal}")
     public void userHasAValidAccountNumberWithSufficientBalance(String accountNumber, BigDecimal amount) {
+        AccountBalance expected = new AccountBalance("1000000066", amount);
+
         try {
             wiremock.start();
-            AccountBalance expected = new AccountBalance("1000000066", amount);
             wiremock.stubFor(
                     WireMock.post(urlPathEqualTo("/account-service"))
                             .willReturn(ok()
@@ -69,7 +71,27 @@ public class ThirdPartyStepDefs {
         }
     }
 
-    @When("I transfer {bigdecimal} to account number {string} that belongs to {string}")
+    @And("my wife {string} has a valid account number {string}")
+    public void myWifeHasAValidAccountNumber(String accountHolderName, String accountNumber) {
+        AccountHolder expected = new AccountHolder(accountNumber, accountHolderName);
+        try {
+            MvcResult result = mockMvc.perform(get(String.format("/v1/accounts/%s/holder-name", accountNumber))
+                            .header("Authorization", accessToken)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            AccountHolder actual = new ObjectMapper().readValue(result.getResponse().getContentAsString(),
+                    AccountHolder.class);
+
+            assertThat(actual.getHolderName()).isEqualTo(expected.getHolderName());
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @When("I transfer {bigdecimal} from {string} to {string}")
     public void userTransfersToAccountNumber(BigDecimal arg0, String arg1, String arg2) {
         throw new PendingException();
     }
@@ -87,4 +109,6 @@ public class ThirdPartyStepDefs {
     @And("my transaction history for account number {string} reads like below")
     public void myTransactionHistoryForAccountNumberReadsLikeBelow(String arg0, DataTable dataTable) {
     }
+
+
 }

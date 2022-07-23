@@ -3,7 +3,7 @@ server:
 
 keycloak-server:
   uri: http://127.0.0.1:8080/realms/maybank
-  openid-uri: ${keycloak-server.uri}}/protocol/openid-connect
+  openid-uri: ${keycloak-server.uri}/protocol/openid-connect
 
 spring:
   security:
