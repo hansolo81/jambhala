@@ -1,6 +1,7 @@
 package id.co.maybank.jambhala.entity;
 
 import id.co.maybank.jambhala.model.AccountBalance;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +16,8 @@ import java.math.BigDecimal;
 @Component
 public class AccountBalanceEsb {
 
-    public static final String ESB_MAYBANK_CO_ID_ACCOUNT_SERVICE = "http://esb.maybank.co.id/account-service";
+    @Value("${esb.accountservice.url}")
+    private String ESB_MAYBANK_CO_ID_ACCOUNT_SERVICE;
     RestTemplate restTemplate;
 
     public AccountBalanceEsb(RestTemplateBuilder restTemplateBuilder) {

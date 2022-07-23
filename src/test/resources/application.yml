@@ -1,0 +1,2 @@
+esb:
+  accountservice.url: http://esb.maybank.co.id:9180/account-service

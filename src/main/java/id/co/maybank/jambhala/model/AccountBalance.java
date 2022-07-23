@@ -1,12 +1,16 @@
 package id.co.maybank.jambhala.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class AccountBalance {
     private String accountNumber;
     private BigDecimal availableBalance;
     private BigDecimal holdAmount;
     private BigDecimal floatAmount;
+
+    public AccountBalance(){
+    }
 
     public AccountBalance(String accountNumber, BigDecimal availableBalance) {
         this.accountNumber = accountNumber;
@@ -22,7 +26,7 @@ public class AccountBalance {
     }
 
     public BigDecimal getAvailableBalance() {
-        return availableBalance;
+        return availableBalance.setScale(2, RoundingMode.CEILING);
     }
 
     public void setAvailableBalance(BigDecimal availableBalance) {
