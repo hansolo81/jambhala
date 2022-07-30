@@ -71,6 +71,12 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>1.5.0.Final</version>
         </dependency>
+       <!-- Swagger UI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.9</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
