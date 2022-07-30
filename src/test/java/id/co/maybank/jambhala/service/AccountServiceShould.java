@@ -43,7 +43,7 @@ public class AccountServiceShould {
                         .availableBalance(expectedBalance).build());
 
         AccountBalance actual = accountService.getBalance(pan, accountNumber);
-        assertThat(actual.getAvailableBalance()).isEqualTo(expectedBalance);
+        assertThat(actual.availableBalance()).isEqualTo(expectedBalance);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class AccountServiceShould {
                         .build());
 
         AccountHolder actual = accountService.getAccountHolder(pan, accountNumber);
-        assertThat(actual.getHolderName()).isEqualTo(expectedHolderName);
+        assertThat(actual.holderName()).isEqualTo(expectedHolderName);
 
     }
 

@@ -47,7 +47,7 @@ public class TransferServiceShould {
 
 
         TransferResult result = transferService.doIntrabank(pan, transferRequest);
-        assertThat(result.getStatusCode()).isEqualTo("0");
-        assertThat(result.getStatusDescription()).isEqualTo("Successful");
+        assertThat(result.statusCode()).isEqualTo("0");
+        assertThat(result.statusDescription()).isEqualTo("Successful");
     }
 }

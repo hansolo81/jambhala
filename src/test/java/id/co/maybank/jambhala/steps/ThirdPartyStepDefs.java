@@ -80,7 +80,7 @@ public class ThirdPartyStepDefs {
             //then
             AccountBalance actual = new ObjectMapper().readValue(result.getResponse().getContentAsString()
                     , AccountBalance.class);
-            assertThat(actual.getAvailableBalance()).isEqualTo(balance);
+            assertThat(actual.availableBalance()).isEqualTo(balance);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -115,7 +115,7 @@ public class ThirdPartyStepDefs {
             AccountHolder actual = new ObjectMapper().readValue(result.getResponse().getContentAsString(),
                     AccountHolder.class);
 
-            assertThat(actual.getHolderName()).isEqualTo(accountHolderName);
+            assertThat(actual.holderName()).isEqualTo(accountHolderName);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
