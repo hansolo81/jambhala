@@ -33,18 +33,18 @@ public class ThirdPartyStepDefs {
     @Autowired
     private MockMvc mockMvc;
 
-    public static WireMockServer wiremock = new WireMockServer(9180);
+    public static WireMockServer esbmock = new WireMockServer(9180);
 
     private String accessToken;
 
     @Before
     public void init() {
-        wiremock.start();
+        esbmock.start();
     }
 
     @After
     public void cleanup() {
-        wiremock.stop();
+        esbmock.stop();
     }
 
     @Given("I am a Maybank2u user with credentials {string} and {string}")
@@ -58,7 +58,7 @@ public class ThirdPartyStepDefs {
 
         try {
             //given
-            wiremock.stubFor(
+            esbmock.stubFor(
                     WireMock.post(urlPathEqualTo("/account-service"))
                             .willReturn(ok()
                                     .withHeader("Content-Type", "application/json")
@@ -92,7 +92,7 @@ public class ThirdPartyStepDefs {
 
         try {
             //given
-            wiremock.stubFor(
+            esbmock.stubFor(
                     WireMock.post(urlPathEqualTo("/account-service"))
                             .willReturn(ok()
                                     .withHeader("Content-Type", "application/json")
@@ -126,7 +126,7 @@ public class ThirdPartyStepDefs {
     public void userTransfersToAccountNumber(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
         try {
             //given
-            wiremock.stubFor(
+            esbmock.stubFor(
                     WireMock.post(urlPathEqualTo("/trx-service"))
                             .willReturn(ok()
                                     .withHeader("Content-Type", "application/json")
