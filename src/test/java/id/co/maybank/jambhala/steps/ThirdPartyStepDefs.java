@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import id.co.maybank.jambhala.entity.PushNotification;
+import id.co.maybank.jambhala.entity.Transaction;
 import id.co.maybank.jambhala.model.*;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.PendingException;
+import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -19,6 +20,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
@@ -38,6 +44,7 @@ public class ThirdPartyStepDefs {
 
     private String accessToken;
 
+    final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @Before
     public void init() {
         esbmock.start();
@@ -46,6 +53,22 @@ public class ThirdPartyStepDefs {
     @After
     public void cleanup() {
         esbmock.stop();
+    }
+
+
+    @DataTableType
+    public Transaction transactionTransformer(Map<String, String> row) {
+
+        return new Transaction(
+                0L,
+                Date.valueOf(LocalDate.parse(row.get("transactionDate"), formatter)),
+                row.get("transactionDetails"),
+                row.get("fromAccount"),
+                row.get("toAccount"),
+                new BigDecimal(row.get("amount")),
+                row.get("referenceNumber")
+        );
+
     }
 
     @Given("I am a Maybank2u user with credentials {string} and {string}")
@@ -179,8 +202,23 @@ public class ThirdPartyStepDefs {
     }
 
     @And("my transaction history for account number {string} reads like below")
-    public void myTransactionHistoryForAccountNumberReadsLikeBelow(String arg0, DataTable dataTable) {
-        throw new PendingException();
+    public void myTransactionHistoryForAccountNumberReadsLikeBelow(String accountNumber, List<Transaction> expected) {
+        try {
+            MvcResult result = mockMvc.perform(get(String.format("/v1/transactions/%s", accountNumber))
+                            .header("Authorization", accessToken)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            TransactionHistory txnHistory = new ObjectMapper().readValue(result.getResponse().getContentAsString()
+                    , TransactionHistory.class);
+            List<Transaction> actualTransactions = txnHistory.getTransactions();
+
+            assertThat(actualTransactions).isEqualTo(expected);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 
