@@ -1,5 +1,6 @@
 package id.co.maybank.jambhala.controller;
 
+import id.co.maybank.jambhala.exception.TransferException;
 import id.co.maybank.jambhala.model.TransferRequest;
 import id.co.maybank.jambhala.model.TransferResult;
 import id.co.maybank.jambhala.service.TransferService;
@@ -26,8 +27,12 @@ public class TransferController {
 
     @PostMapping("/intrabank")
     public ResponseEntity<TransferResult> doIntrabankTransfer(@AuthenticationPrincipal Jwt jwt, @RequestBody TransferRequest request) {
-        TransferResult transferResult = transferService.doIntrabank(jwt.getClaimAsString("pan"), request);
-        return new ResponseEntity<>(transferResult, HttpStatus.OK);
+        try {
+            TransferResult transferResult = transferService.doIntrabank(jwt.getClaimAsString("pan"), request);
+            return new ResponseEntity<>(transferResult, HttpStatus.OK);
+        } catch (TransferException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 

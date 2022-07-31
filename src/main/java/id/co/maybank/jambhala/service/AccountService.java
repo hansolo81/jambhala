@@ -5,6 +5,7 @@ import id.co.maybank.jambhala.mapper.ESBConverter;
 import id.co.maybank.jambhala.model.AccountBalance;
 import id.co.maybank.jambhala.model.AccountHolder;
 import id.co.maybank.jambhala.model.EsbAccountInfoRes;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +22,7 @@ public class AccountService {
         return ESBConverter.MAPPER.convertToAccountBalance(esbBalance);
     }
 
+    @Cacheable("accountNumber")
     public AccountHolder getAccountHolder(String pan, String accountNumber) {
         EsbAccountInfoRes esbAccountHolder = accountInfoEsb.getAccountInfo(pan, accountNumber);
         return ESBConverter.MAPPER.convertToAccountHolder(esbAccountHolder) ;

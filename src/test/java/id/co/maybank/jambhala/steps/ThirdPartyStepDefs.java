@@ -3,6 +3,7 @@ package id.co.maybank.jambhala.steps;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import id.co.maybank.jambhala.entity.PushNotification;
 import id.co.maybank.jambhala.model.*;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
@@ -159,17 +160,27 @@ public class ThirdPartyStepDefs {
     }
 
     @Then("I should receive a message saying Your fund transfer of {bigdecimal} to {string} is successful")
-    public void theCustomerShouldReceiveAMessageSayingYourFundTransferOfToIsSuccessful(BigDecimal arg0, String arg1) {
-        throw new PendingException();
-    }
+    public void theCustomerShouldReceiveAMessageSayingYourFundTransferOfToIsSuccessful(BigDecimal amount, String recipient) {
+        //when
+        try {
+            MvcResult result = mockMvc.perform(get("/v1/push-notifications/new")
+                            .header("Authorization", accessToken)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isOk())
+                    .andReturn();
+            PushNotification actual = new ObjectMapper().readValue(result.getResponse().getContentAsString()
+                    , PushNotification.class);
+            assertThat(actual.getMessage()).isEqualTo(String.format("Your fund transfer of %f to %s is successful", amount, recipient));
 
-    @And("my available balance for account number {string} is now {double}")
-    public void myAvailableBalanceForAccountNumberIsNow(String arg0, int arg1, int arg2) {
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     @And("my transaction history for account number {string} reads like below")
     public void myTransactionHistoryForAccountNumberReadsLikeBelow(String arg0, DataTable dataTable) {
+        throw new PendingException();
     }
 
 

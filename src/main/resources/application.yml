@@ -11,6 +11,13 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${keycloak-server.uri}
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+  jpa:
+    show-sql: true
 
 esb:
   url:
