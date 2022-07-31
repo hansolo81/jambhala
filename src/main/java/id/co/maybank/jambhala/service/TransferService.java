@@ -1,6 +1,7 @@
 package id.co.maybank.jambhala.service;
 
 import id.co.maybank.jambhala.entity.PushNotification;
+import id.co.maybank.jambhala.entity.Transaction;
 import id.co.maybank.jambhala.entity.TransactionEsb;
 import id.co.maybank.jambhala.exception.TransferException;
 import id.co.maybank.jambhala.mapper.ESBConverter;
@@ -9,6 +10,9 @@ import id.co.maybank.jambhala.model.EsbTrxRes;
 import id.co.maybank.jambhala.model.TransferRequest;
 import id.co.maybank.jambhala.model.TransferResult;
 import org.springframework.stereotype.Service;
+
+import java.sql.Date;
+import java.util.UUID;
 
 @Service
 public class TransferService {
@@ -19,16 +23,32 @@ public class TransferService {
 
     AccountService accountService;
 
-    public TransferService(TransactionEsb transactionESB, PushNotificationService pushNotificationService, AccountService accountService) {
+    TransactionService transactionService;
+
+    public TransferService(TransactionEsb transactionESB, PushNotificationService pushNotificationService, AccountService accountService, TransactionService transactionService) {
         this.transactionESB = transactionESB;
         this.notificationService = pushNotificationService;
         this.accountService = accountService;
+        this.transactionService = transactionService;
     }
 
     public TransferResult doIntrabank(String pan, TransferRequest request) {
         EsbTrxRes esbTrxRes = transactionESB.doTransaction(pan, request);
+
         if (esbTrxRes.statusCode().equals("0")) {
             AccountHolder accountHolder = accountService.getAccountHolder(pan, request.toAccountNumber());
+
+            transactionService.save(Transaction.builder()
+                    .pan(pan)
+                    .amount(request.amount())
+                    .fromAccount(request.fromAccountNumber())
+                    .toAccount(request.toAccountNumber())
+                    .transactionDate(new Date(System.currentTimeMillis()))
+                    .transactionDetails("third party transfer")
+                    .referenceNumber(UUID.randomUUID().toString())
+                    .build()
+            );
+
             notificationService.save(PushNotification.builder()
                     .pan(pan)
                     .message(String.format("Your fund transfer of %f to %s is successful", request.amount(), accountHolder.holderName()))

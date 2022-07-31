@@ -23,8 +23,10 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
@@ -45,6 +47,7 @@ public class ThirdPartyStepDefs {
     private String accessToken;
 
     final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     @Before
     public void init() {
         esbmock.start();
@@ -215,7 +218,20 @@ public class ThirdPartyStepDefs {
                     , TransactionHistory.class);
             List<Transaction> actualTransactions = txnHistory.getTransactions();
 
-            assertThat(actualTransactions).isEqualTo(expected);
+            assertThat(expected.size()).isEqualTo(actualTransactions.size());
+
+            Iterator<Transaction> expectedIt = expected.iterator();
+            //then
+            while (expectedIt.hasNext()) {
+                Transaction ex = expectedIt.next();
+                Transaction ac = actualTransactions.iterator().next();
+//                assertThat(ex.getTransactionDate()).isEqualTo(ac.getTransactionDate());
+                assertThat(ex.getTransactionDetails()).isEqualTo(ac.getTransactionDetails());
+                assertThat(ex.getFromAccount()).isEqualTo(ac.getFromAccount());
+                assertThat(ex.getToAccount()).isEqualTo(ac.getToAccount());
+                assertThat(ex.getAmount()).isEqualTo(ac.getAmount());
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

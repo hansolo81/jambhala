@@ -23,4 +23,8 @@ public class TransactionService {
 
         return new TransactionHistory(byPan);
     }
+
+    public Transaction save(Transaction transaction) {
+        return transactionRepository.save(transaction);
+    }
 }

@@ -8,9 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,5 +60,26 @@ public class TransactionServiceShould {
                 .willReturn(null);
 
         assertThrows(EntityNotFoundException.class, () -> transactionService.getTransactionHistory(pan));
+    }
+
+    @Test
+    public void createNewTransaction() {
+        Transaction newTrans = Transaction.builder()
+                .pan("16000000000001")
+                .amount(BigDecimal.valueOf(100))
+                .fromAccount("100000000066")
+                .toAccount("1000000099")
+                .transactionDetails("third party transfer")
+                .build();
+
+        Transaction saved = new Transaction();
+        BeanUtils.copyProperties(newTrans, saved);
+        saved.setId(1L);
+        saved.setTransactionDate(new Date(System.currentTimeMillis()));
+        saved.setReferenceNumber("0000000001");
+
+        given(transactionRepository.save(newTrans)).willReturn(saved);
+
+        assertThat(transactionService.save(newTrans)).isEqualTo(saved);
     }
 }
