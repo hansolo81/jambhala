@@ -1,4 +1,4 @@
-Feature: As a Maybank customer, I want to transfer money from my Maybank account to another Maybank account so I can send money to my friends or families
+Feature: Third Party Funds Transfer
 
   Scenario: Valid Payee with sufficient balance
     Given I am a Maybank2u user with credentials "anakin" and "ihateyou"
@@ -9,5 +9,3 @@ Feature: As a Maybank customer, I want to transfer money from my Maybank account
     And my transaction history for account number "1000000066" reads like below
       | date       | transactionDetails   | fromAccount | toAccount  | amount | referenceNumber |
       | 05-07-2022 | third party transfer | 1000000066  | 1000000099 | 10000  | 000000001       |
-
-
