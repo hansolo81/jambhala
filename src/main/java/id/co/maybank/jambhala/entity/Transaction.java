@@ -18,16 +18,25 @@ public class Transaction {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(nullable = false)
+    private String pan;
+
+    @Column(nullable = false)
     private Date transactionDate;
 
+    @Column(nullable = false)
     private String transactionDetails;
 
+    @Column(nullable = false)
     private String fromAccount;
 
+    @Column(nullable = false)
     private String toAccount;
 
+    @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(nullable = false)
     private String referenceNumber;
 
 }

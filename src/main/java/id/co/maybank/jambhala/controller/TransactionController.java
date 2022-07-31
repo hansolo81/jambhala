@@ -1,6 +1,7 @@
 package id.co.maybank.jambhala.controller;
 
 import id.co.maybank.jambhala.model.TransactionHistory;
+import id.co.maybank.jambhala.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,8 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/transactions")
 public class TransactionController {
 
+    TransactionService transactionService;
+
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
     @GetMapping(value = "/{accountNumber}")
     public ResponseEntity<TransactionHistory> getTransactionHistory(@AuthenticationPrincipal Jwt user, @PathVariable String accountNumber) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        TransactionHistory transactionHistory = transactionService.getTransactionHistory(user.getClaimAsString("pan"));
+        return new ResponseEntity<>(transactionHistory, HttpStatus.OK);
     }
 }

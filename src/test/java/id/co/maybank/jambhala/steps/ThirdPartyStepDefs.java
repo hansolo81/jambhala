@@ -61,6 +61,7 @@ public class ThirdPartyStepDefs {
 
         return new Transaction(
                 0L,
+                row.get("pan"),
                 Date.valueOf(LocalDate.parse(row.get("transactionDate"), formatter)),
                 row.get("transactionDetails"),
                 row.get("fromAccount"),
