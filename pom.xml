@@ -8,7 +8,7 @@
         <version>2.7.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>id.co.maybank</groupId>
+    <groupId>id.co.rimaubank</groupId>
     <artifactId>jambhala</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>jambhala</name>

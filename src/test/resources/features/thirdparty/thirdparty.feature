@@ -1,7 +1,7 @@
-Feature: Third Party Funds Transfer
+Feature: Intrabank Funds Transfer
 
   Scenario: Valid Payee with sufficient balance
-    Given I am a Maybank2u user with credentials "anakin" and "ihateyou"
+    Given I am a jambhala user with credentials "anakin" and "ihateyou"
     And I have a valid account number "1000000066" with balance of 10001.00
     And my wife "padme" has a valid account number "1000000099"
     When I transfer 10000.00 from "1000000066" to "1000000099"

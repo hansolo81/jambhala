@@ -1,4 +1,4 @@
-package id.co.maybank.jambhala;
+package id.co.rimaubank.jambhala;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

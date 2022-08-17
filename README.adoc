@@ -1,0 +1,10 @@
+
+# <u>JAMBHALA</u>
+
+### Objective
+A demo app to showcase Outside-In TDD with an actual banking use-case
+
+### Problem description - Intra bank funds transfer
+Create an application that allows customer to transfer funds from her account to another account within the same bank
+
+## Acceptance criteria
