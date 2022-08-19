@@ -1,7 +1,12 @@
 package id.co.rimaubank.jambhala.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import id.co.rimaubank.jambhala.model.AccountBalance;
+import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,6 +28,19 @@ public class ThirdPartyIntegrationStepDefs {
 
     @Autowired
     MockMvc mockMvc;
+
+    public static WireMockServer esbMock = new WireMockServer(9010);
+
+    @Before
+    public void init() {
+        esbMock.start();
+    }
+
+    @After
+    public void cleanup() {
+        esbMock.stop();
+    }
+
     @Given("I am a jambhala user with credentials {string} and {string}")
     public void iAmAJambhalaUserWithCredentialsAnd(String username, String password) {
         token = keyCloakRestUtil.getToken(username, password, "jambhala");
@@ -32,12 +51,28 @@ public class ThirdPartyIntegrationStepDefs {
     public void iHaveAValidAccountNumberWithBalanceOf(String accountNumber, BigDecimal expectedBalance) {
         String url = String.format("/v1/accounts/%s/balance-inquiry", accountNumber);
         try {
-            MvcResult mvcResult = mockMvc.perform(get(url))
+             esbMock.stubFor(
+                     WireMock.post(WireMock.urlPathEqualTo("/account-service"))
+                             .willReturn(ok()
+                                     .withHeader("Content-Type", "application/json")
+                                     .withBody(
+                                            new ObjectMapper().writeValueAsString(
+                                                    EsbAccountInfoRes.builder()
+                                                            .accountNumber(accountNumber)
+                                                            .availableBalance(expectedBalance)
+                                                            .build()
+                                            )
+                                     )
+                             )
+             );
+
+
+            MvcResult expected = mockMvc.perform(get(url))
                     .andExpect(status().isOk())
                     .andReturn();
 
             AccountBalance accountBalance = new ObjectMapper().readValue(
-                    mvcResult.getResponse().getContentAsString(),
+                    expected.getResponse().getContentAsString(),
                     AccountBalance.class);
 
             assertThat(accountBalance.availableBalance()).isEqualTo(expectedBalance);

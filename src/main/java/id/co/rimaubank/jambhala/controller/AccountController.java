@@ -1,6 +1,7 @@
 package id.co.rimaubank.jambhala.controller;
 
 import id.co.rimaubank.jambhala.model.AccountBalance;
+import id.co.rimaubank.jambhala.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +15,17 @@ import java.math.BigDecimal;
 @RequestMapping(value = "/v1/accounts")
 public class AccountController {
 
+    AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
+
     @GetMapping("/{accountNumber}/balance-inquiry")
     public ResponseEntity<AccountBalance> getAccountBalance(@PathVariable String accountNumber) {
 
        return new ResponseEntity<>(
-               new AccountBalance(accountNumber, new BigDecimal("10001.00")),
+               accountService.getBalance(accountNumber),
                HttpStatus.OK) ;
     }
 
