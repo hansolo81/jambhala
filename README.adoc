@@ -1,5 +1,5 @@
 
-# <u>JAMBHALA</u>
+# JAMBHALA
 
 ### Objective
 A demo app to showcase Outside-In TDD with an actual banking use-case
