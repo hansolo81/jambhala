@@ -1,5 +1,7 @@
 package id.co.rimaubank.jambhala.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import id.co.rimaubank.jambhala.model.EsbAccountInfoReq;
 import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +28,12 @@ public class AccountInfoESB {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_JSON_VALUE));
         EsbAccountInfoReq esbAccountInfoReq = new EsbAccountInfoReq(customerNumber, accountNumber);
-        HttpEntity<String> request = new HttpEntity<>(esbAccountInfoReq.toString(), headers);
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(new ObjectMapper().writeValueAsString(esbAccountInfoReq), headers);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         ResponseEntity<EsbAccountInfoRes> responseEntity = restTemplate.postForEntity(
                 esbUrl, request, EsbAccountInfoRes.class);
         return responseEntity.getBody();

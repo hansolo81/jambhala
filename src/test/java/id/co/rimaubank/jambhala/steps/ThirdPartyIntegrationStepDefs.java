@@ -5,9 +5,11 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import id.co.rimaubank.jambhala.model.AccountBalance;
 import id.co.rimaubank.jambhala.model.AccountHolder;
+import id.co.rimaubank.jambhala.model.EsbAccountInfoReq;
 import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.ok;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,6 +59,7 @@ public class ThirdPartyIntegrationStepDefs {
         try {
             esbMock.stubFor(
                     WireMock.post(WireMock.urlPathEqualTo("/account-service"))
+                            .withRequestBody(matchingJsonPath("$.accountNumber", equalTo(accountNumber)))
                             .willReturn(ok()
                                     .withHeader("Content-Type", "application/json")
                                     .withBody(
@@ -97,6 +100,7 @@ public class ThirdPartyIntegrationStepDefs {
 
             esbMock.stubFor(
                     WireMock.post(WireMock.urlPathEqualTo("/account-service"))
+                            .withRequestBody(matchingJsonPath("$.accountNumber", equalTo(accountNumber)))
                             .willReturn(ok()
                                     .withHeader("Content-Type", "application/json")
                                     .withBody(
