@@ -8,7 +8,6 @@ import id.co.rimaubank.jambhala.model.AccountHolder;
 import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import lombok.extern.slf4j.Slf4j;
