@@ -1,6 +1,7 @@
 package id.co.rimaubank.jambhala.controller;
 
 import id.co.rimaubank.jambhala.model.AccountBalance;
+import id.co.rimaubank.jambhala.model.AccountHolder;
 import id.co.rimaubank.jambhala.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -32,5 +33,15 @@ public class AccountController {
                accountService.getBalance(jwt.getClaimAsString("custNo"), accountNumber),
                HttpStatus.OK) ;
     }
+
+    @GetMapping("/{accountNumber}/holder-name")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    public ResponseEntity<AccountHolder> getHolderName(@AuthenticationPrincipal Jwt jwt, @PathVariable String accountNumber) {
+        return new ResponseEntity<>(
+                new AccountHolder(accountNumber, "padme"),
+                HttpStatus.OK
+        );
+    }
+
 
 }

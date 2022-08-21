@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record EsbAccountInfoRes(String accountNumber, BigDecimal availableBalance) {
+public record EsbAccountInfoRes(String accountNumber, BigDecimal availableBalance, String holderName) {
 }

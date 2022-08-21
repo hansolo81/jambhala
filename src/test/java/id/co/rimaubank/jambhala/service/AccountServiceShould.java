@@ -1,6 +1,7 @@
 package id.co.rimaubank.jambhala.service;
 
 import id.co.rimaubank.jambhala.model.AccountBalance;
+import id.co.rimaubank.jambhala.model.AccountHolder;
 import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,5 +41,17 @@ public class AccountServiceShould {
 
         AccountBalance accountBalance = accountService.getBalance(customerNumber, accountNumber);
         assertThat(accountBalance.availableBalance()).isEqualTo(expectedBalance);
+    }
+
+    @Test
+    public void returnAccountHolderName() {
+        String expectedHolderName = "padme";
+        given(esb.getAccountInfo(customerNumber, accountNumber))
+                .willReturn(EsbAccountInfoRes.builder()
+                        .accountNumber(accountNumber)
+                        .holderName(expectedHolderName)
+                        .build());
+
+        AccountHolder accountHolder = accountService.getAccountHolder(customerNumber, accountNumber);
     }
 }

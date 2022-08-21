@@ -1,6 +1,7 @@
 package id.co.rimaubank.jambhala.service;
 
 import id.co.rimaubank.jambhala.model.AccountBalance;
+import id.co.rimaubank.jambhala.model.AccountHolder;
 import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
 import org.springframework.stereotype.Service;
 
@@ -16,5 +17,10 @@ public class AccountService {
     public AccountBalance getBalance(String customerNumber, String accountNumber) {
         EsbAccountInfoRes esbAccountInfo = accountInfoESB.getAccountInfo(customerNumber, accountNumber);
         return new AccountBalance(esbAccountInfo.accountNumber(), esbAccountInfo.availableBalance());
+    }
+
+    public AccountHolder getAccountHolder(String customerNumber, String accountNumber) {
+        EsbAccountInfoRes esbAccountInfo = accountInfoESB.getAccountInfo(customerNumber, accountNumber);
+        return new AccountHolder(esbAccountInfo.accountNumber(), esbAccountInfo.holderName());
     }
 }
