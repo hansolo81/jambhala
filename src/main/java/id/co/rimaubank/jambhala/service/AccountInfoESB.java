@@ -20,8 +20,8 @@ public class AccountInfoESB {
         restTemplate = restTemplateBuilder.build();
     }
 
-    public EsbAccountInfoRes getAccountInfo(String accountNumber) {
-        EsbAccountInfoReq esbAccountInfoReq = new EsbAccountInfoReq(accountNumber);
+    public EsbAccountInfoRes getAccountInfo(String customerNumber, String accountNumber) {
+        EsbAccountInfoReq esbAccountInfoReq = new EsbAccountInfoReq(customerNumber, accountNumber);
         HttpEntity<String> request = new HttpEntity<>(esbAccountInfoReq.toString());
         ResponseEntity<EsbAccountInfoRes> responseEntity = restTemplate.postForEntity(
                 esbUrl, request, EsbAccountInfoRes.class);

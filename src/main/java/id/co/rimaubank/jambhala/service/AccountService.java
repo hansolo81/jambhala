@@ -4,8 +4,6 @@ import id.co.rimaubank.jambhala.model.AccountBalance;
 import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
 @Service
 public class AccountService {
 
@@ -15,8 +13,8 @@ public class AccountService {
         this.accountInfoESB = accountInfoESB;
     }
 
-    public AccountBalance getBalance(String accountNumber) {
-        EsbAccountInfoRes esbAccountInfo = accountInfoESB.getAccountInfo(accountNumber);
+    public AccountBalance getBalance(String customerNumber, String accountNumber) {
+        EsbAccountInfoRes esbAccountInfo = accountInfoESB.getAccountInfo(customerNumber, accountNumber);
         return new AccountBalance(esbAccountInfo.accountNumber(), esbAccountInfo.availableBalance());
     }
 }
