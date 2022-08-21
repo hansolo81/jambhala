@@ -38,7 +38,7 @@ public class AccountController {
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<AccountHolder> getHolderName(@AuthenticationPrincipal Jwt jwt, @PathVariable String accountNumber) {
         return new ResponseEntity<>(
-                new AccountHolder(accountNumber, "padme"),
+                accountService.getAccountHolder(jwt.getClaimAsString("custNo"), accountNumber),
                 HttpStatus.OK
         );
     }
