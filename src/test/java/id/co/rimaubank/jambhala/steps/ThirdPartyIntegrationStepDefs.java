@@ -94,6 +94,23 @@ public class ThirdPartyIntegrationStepDefs {
         String url = String.format("/v1/accounts/%s/holder-name", accountNumber);
 
         try {
+            //given
+
+            esbMock.stubFor(
+                    WireMock.post(WireMock.urlPathEqualTo("/account-service"))
+                            .willReturn(ok()
+                                    .withHeader("Content-Type", "application/json")
+                                    .withBody(
+                                            new ObjectMapper().writeValueAsString(
+                                                    EsbAccountInfoRes.builder()
+                                                            .accountNumber(accountNumber)
+                                                            .holderName(accountHolderName)
+                                                            .build()
+                                            )
+                                    )
+                            )
+            );
+
             MvcResult expected = mockMvc.perform(get(url)
                             .header("Authorization", token)
                     )
@@ -103,6 +120,8 @@ public class ThirdPartyIntegrationStepDefs {
             AccountHolder accountHolder = new ObjectMapper().readValue(
                     expected.getResponse().getContentAsString(),
                     AccountHolder.class);
+
+            assertThat(accountHolder.holderName()).isEqualTo(accountHolderName);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
