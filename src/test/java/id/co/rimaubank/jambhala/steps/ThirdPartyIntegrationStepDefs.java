@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import id.co.rimaubank.jambhala.model.AccountBalance;
+import id.co.rimaubank.jambhala.model.AccountHolder;
 import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import lombok.extern.slf4j.Slf4j;
@@ -85,5 +87,24 @@ public class ThirdPartyIntegrationStepDefs {
         }
 
 
+    }
+
+    @And("my wife {string} has a valid account number {string}")
+    public void myWifeHasAValidAccountNumber(String accountHolderName, String accountNumber) {
+        String url = String.format("/v1/accounts/%s/holder-name", accountNumber);
+
+        try {
+            MvcResult expected = mockMvc.perform(get(url)
+                            .header("Authorization", token)
+                    )
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            AccountHolder accountHolder = new ObjectMapper().readValue(
+                    expected.getResponse().getContentAsString(),
+                    AccountHolder.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
