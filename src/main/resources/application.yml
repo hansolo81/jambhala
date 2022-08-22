@@ -14,7 +14,7 @@ spring:
 
 esb:
   url:
-    accountservice: http://esb.maybank.co.id:9010/account-service
+    accountservice: http://esb.rimaubank.co.id:9010/account-service
 
 logging:
   level:
