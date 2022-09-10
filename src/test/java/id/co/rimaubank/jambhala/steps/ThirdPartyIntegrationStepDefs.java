@@ -3,17 +3,16 @@ package id.co.rimaubank.jambhala.steps;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import id.co.rimaubank.jambhala.model.AccountBalance;
-import id.co.rimaubank.jambhala.model.AccountHolder;
-import id.co.rimaubank.jambhala.model.EsbAccountInfoReq;
-import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
+import id.co.rimaubank.jambhala.model.*;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -22,6 +21,7 @@ import java.math.BigDecimal;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
@@ -125,6 +125,30 @@ public class ThirdPartyIntegrationStepDefs {
                     AccountHolder.class);
 
             assertThat(accountHolder.holderName()).isEqualTo(accountHolderName);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @When("I transfer {bigdecimal} from {string} to {string}")
+    public void iTransferFromTo(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
+        String url = "/v1/transfer/intrabank";
+        TransferRequest transferRequest = TransferRequest.builder()
+                .amount(amount)
+                .fromAccountNumber(fromAccountNumber)
+                .toAccountNumber(toAccountNumber)
+                .build();
+
+        try {
+            MvcResult result = mockMvc.perform(post(url)
+                            .header("Authorization", token)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .content(new ObjectMapper().writeValueAsString(
+                                    transferRequest
+                            )))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
