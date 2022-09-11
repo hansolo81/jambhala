@@ -4,7 +4,7 @@ import id.co.rimaubank.jambhala.mapper.EsbConverter;
 import id.co.rimaubank.jambhala.model.EsbTransferRes;
 import id.co.rimaubank.jambhala.model.TransferRequest;
 import id.co.rimaubank.jambhala.model.TransferResponse;
-import org.junit.After;
+import id.co.rimaubank.jambhala.service.esb.EsbStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -26,7 +25,7 @@ public class TransferServiceShould {
     TransferEsb transferEsb;
 
     @Before
-    public void initialize() throws Exception {
+    public void initialize() {
         transferService = new TransferService(transferEsb);
     }
 
@@ -48,7 +47,8 @@ public class TransferServiceShould {
                 );
 
         TransferResponse transferResponse = transferService.doTransfer(transferRequest);
-        assertThat(transferResponse.statusCode()).isEqualTo("0");
+        EsbStatus esbStatus = transferResponse.getEsbStatus();
+        assertThat(esbStatus.isSuccessful()).isTrue();
     }
 
 
