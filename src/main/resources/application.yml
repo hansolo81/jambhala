@@ -14,7 +14,8 @@ spring:
 
 esb:
   url:
-    accountservice: http://esb.rimaubank.co.id:9010/account-service
+    account-service: http://esb.rimaubank.co.id:9010/account-service
+    transfer-service: http://esb.rimaubank.co.id:9010/transfer-service
 
 logging:
   level:

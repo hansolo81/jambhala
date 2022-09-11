@@ -1,5 +1,7 @@
 package id.co.rimaubank.jambhala.service;
 
+import id.co.rimaubank.jambhala.mapper.EsbConverter;
+import id.co.rimaubank.jambhala.model.EsbTransferRes;
 import id.co.rimaubank.jambhala.model.TransferRequest;
 import id.co.rimaubank.jambhala.model.TransferResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +12,18 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class TransferService {
 
+    TransferEsb transferEsb;
+
+    TransferService(TransferEsb transferEsb) {
+        this.transferEsb = transferEsb;
+    }
+
     public TransferResponse doTransfer(TransferRequest transferRequest) {
-        throw new NotImplementedException();
+        EsbTransferRes esbTransferRes = transferEsb.doTransfer(
+                EsbConverter.MAPPER.convertToEsbTransferRequest(transferRequest));
+        TransferResponse transferResponse = EsbConverter.MAPPER.convertToTransferResponse(
+               esbTransferRes
+        );
+        return transferResponse;
     }
 }

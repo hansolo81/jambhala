@@ -5,6 +5,7 @@ import id.co.rimaubank.jambhala.model.TransferResponse;
 import id.co.rimaubank.jambhala.service.TransferService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,11 +16,12 @@ public class TransferController {
     TransferService transferService ;
 
     TransferController(TransferService transferService) {
-        transferService = transferService;
+        this.transferService = transferService;
     }
 
+    @PostMapping(value = "/intra-bank")
     public ResponseEntity<TransferResponse> doTransfer(@RequestBody TransferRequest transferRequest) {
-
-       return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        TransferResponse transferResponse = transferService.doTransfer(transferRequest);
+        return new ResponseEntity<>(transferResponse, HttpStatus.OK);
    }
 }

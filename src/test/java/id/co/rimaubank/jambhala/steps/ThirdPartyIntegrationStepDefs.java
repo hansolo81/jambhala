@@ -1,5 +1,6 @@
 package id.co.rimaubank.jambhala.steps;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -132,7 +133,28 @@ public class ThirdPartyIntegrationStepDefs {
 
     @When("I transfer {bigdecimal} from {string} to {string}")
     public void iTransferFromTo(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
-        String url = "/v1/transfer/intrabank";
+        String url = "/v1/transfer/intra-bank";
+
+        try {
+            esbMock.stubFor(
+                    WireMock.post(WireMock.urlPathEqualTo("/transfer-service"))
+                            .withRequestBody(matchingJsonPath("$.fromAccountNumber", equalTo(fromAccountNumber)))
+                            .willReturn(ok()
+                                    .withHeader("Content-Type", "application/json")
+                                    .withBody(
+                                            new ObjectMapper().writeValueAsString(
+                                                    EsbTransferRes.builder()
+                                                            .statusCode("0")
+                                                            .statusDesc("Success")
+                                                            .build()
+                                            )
+                                    )
+                            )
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
         TransferRequest transferRequest = TransferRequest.builder()
                 .amount(amount)
                 .fromAccountNumber(fromAccountNumber)
