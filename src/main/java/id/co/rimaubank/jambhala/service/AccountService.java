@@ -3,6 +3,7 @@ package id.co.rimaubank.jambhala.service;
 import id.co.rimaubank.jambhala.model.AccountBalance;
 import id.co.rimaubank.jambhala.model.AccountHolder;
 import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
+import id.co.rimaubank.jambhala.service.esb.AccountInfoESB;
 import org.springframework.stereotype.Service;
 
 @Service

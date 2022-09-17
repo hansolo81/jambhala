@@ -4,8 +4,8 @@ import id.co.rimaubank.jambhala.mapper.EsbConverter;
 import id.co.rimaubank.jambhala.model.EsbTransferRes;
 import id.co.rimaubank.jambhala.model.TransferRequest;
 import id.co.rimaubank.jambhala.model.TransferResponse;
+import id.co.rimaubank.jambhala.service.esb.TransferEsb;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Service;
 
 @Service

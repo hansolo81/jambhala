@@ -5,6 +5,7 @@ import id.co.rimaubank.jambhala.model.EsbTransferRes;
 import id.co.rimaubank.jambhala.model.TransferRequest;
 import id.co.rimaubank.jambhala.model.TransferResponse;
 import id.co.rimaubank.jambhala.service.esb.EsbStatus;
+import id.co.rimaubank.jambhala.service.esb.TransferEsb;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,8 +42,8 @@ public class TransferServiceShould {
        given(transferEsb.doTransfer(EsbConverter.MAPPER.convertToEsbTransferRequest(transferRequest)))
                 .willReturn(
                         EsbTransferRes.builder()
-                                .statusCode("0")
-                                .statusDesc("Success")
+                                .statusCode(EsbStatus.SUCCESS.value())
+                                .statusDesc(EsbStatus.SUCCESS.getReasonPhrase())
                                 .build()
                 );
 

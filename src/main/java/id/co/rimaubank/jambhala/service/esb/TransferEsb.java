@@ -1,9 +1,9 @@
-package id.co.rimaubank.jambhala.service;
+package id.co.rimaubank.jambhala.service.esb;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.co.rimaubank.jambhala.model.EsbAccountInfoReq;
-import id.co.rimaubank.jambhala.model.EsbAccountInfoRes;
+import id.co.rimaubank.jambhala.model.EsbTransferRequest;
+import id.co.rimaubank.jambhala.model.EsbTransferRes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -14,28 +14,28 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class AccountInfoESB {
+public class TransferEsb {
 
-    @Value("${esb.url.account-service}")
-    private String esbUrl;
+    @Value("${esb.url.transfer-service}")
+    private String url;
+
     RestTemplate restTemplate;
 
-    public AccountInfoESB(RestTemplateBuilder restTemplateBuilder) {
+    TransferEsb(RestTemplateBuilder restTemplateBuilder) {
         restTemplate = restTemplateBuilder.build();
     }
-
-    public EsbAccountInfoRes getAccountInfo(String customerNumber, String accountNumber) {
+    public EsbTransferRes doTransfer(EsbTransferRequest esbTransferRequest) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_JSON_VALUE));
-        EsbAccountInfoReq esbAccountInfoReq = new EsbAccountInfoReq(customerNumber, accountNumber);
+        headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = null;
+
         try {
-            request = new HttpEntity<>(new ObjectMapper().writeValueAsString(esbAccountInfoReq), headers);
+            request = new HttpEntity<>(new ObjectMapper().writeValueAsString(esbTransferRequest), headers);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        ResponseEntity<EsbAccountInfoRes> responseEntity = restTemplate.postForEntity(
-                esbUrl, request, EsbAccountInfoRes.class);
+
+        ResponseEntity<EsbTransferRes> responseEntity = restTemplate.postForEntity(url, request, EsbTransferRes.class);
         return responseEntity.getBody();
     }
 }
