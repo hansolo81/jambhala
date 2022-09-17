@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import id.co.rimaubank.jambhala.entity.PushNotification;
 import id.co.rimaubank.jambhala.model.*;
+import id.co.rimaubank.jambhala.service.esb.EsbStatus;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.jetty.webapp.MetaDataComplete.True;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -144,8 +148,8 @@ public class ThirdPartyIntegrationStepDefs {
                                     .withBody(
                                             new ObjectMapper().writeValueAsString(
                                                     EsbTransferRes.builder()
-                                                            .statusCode("0")
-                                                            .statusDesc("Success")
+                                                            .statusCode(EsbStatus.SUCCESS.value())
+                                                            .statusDesc(EsbStatus.SUCCESS.getReasonPhrase())
                                                             .build()
                                             )
                                     )
@@ -170,6 +174,32 @@ public class ThirdPartyIntegrationStepDefs {
                             )))
                     .andExpect(status().isOk())
                     .andReturn();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Then("I should receive a message saying {string}")
+    public void iShouldReceiveAMessageSayingYourFundTransferOfToIsSuccessful(String message) {
+
+       String url = "/v1/push-notifications/new";
+        try {
+            MvcResult result = mockMvc.perform(get(url)
+                            .header("Authorization", token)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            )
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            List<PushNotification> pushNotificationList = new ObjectMapper().readValue(
+                    result.getResponse().getContentAsString(), List.class);
+
+            for (PushNotification notif : pushNotificationList) {
+                if (message.equals(notif.getMessage())) {
+                    assertThat(True);
+                }
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
