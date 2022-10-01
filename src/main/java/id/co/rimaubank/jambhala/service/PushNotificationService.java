@@ -1,6 +1,7 @@
 package id.co.rimaubank.jambhala.service;
 
 import id.co.rimaubank.jambhala.entity.PushNotification;
+import id.co.rimaubank.jambhala.repository.PushNotificationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,18 +9,13 @@ import java.util.List;
 @Service
 public class PushNotificationService {
 
+    PushNotificationRepository pushNotificationRepository;
+
+    public PushNotificationService(PushNotificationRepository pushNotificationRepository) {
+        this.pushNotificationRepository = pushNotificationRepository;
+    }
+
     public List<PushNotification> getNotifications(String custNo) {
-        return List.of(
-                PushNotification.builder()
-                        .custNo(custNo)
-                        .message("Your fund transfer of 10000.00 to padme is successful")
-                        .read(false)
-                        .build(),
-                PushNotification.builder()
-                        .custNo(custNo)
-                        .message("Welcome to Rimaubank")
-                        .read(false)
-                        .build()
-        );
+        return pushNotificationRepository.findByCustNo(custNo);
     }
 }
