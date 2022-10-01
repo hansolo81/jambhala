@@ -20,6 +20,10 @@ public class TransactionHistoryController {
 
     TransactionHistoryService transactionHistoryService;
 
+    public TransactionHistoryController(TransactionHistoryService transactionHistoryService) {
+        this.transactionHistoryService = transactionHistoryService;
+    }
+
     @GetMapping("/{accountNumber}")
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<TransactionHistory> getTransactionHistory(@AuthenticationPrincipal Jwt jwt, @PathVariable String accountNumber) {
