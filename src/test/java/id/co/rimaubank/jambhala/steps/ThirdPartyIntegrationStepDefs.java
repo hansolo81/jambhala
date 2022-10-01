@@ -5,11 +5,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import id.co.rimaubank.jambhala.entity.MonetaryTransaction;
 import id.co.rimaubank.jambhala.entity.PushNotification;
 import id.co.rimaubank.jambhala.model.*;
 import id.co.rimaubank.jambhala.service.esb.EsbStatus;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -21,7 +23,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,6 +45,8 @@ public class ThirdPartyIntegrationStepDefs {
     @Autowired
     MockMvc mockMvc;
 
+    final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     public static WireMockServer esbMock = new WireMockServer(9010);
 
     @Before
@@ -49,6 +57,20 @@ public class ThirdPartyIntegrationStepDefs {
     @After
     public void cleanup() {
         esbMock.stop();
+    }
+
+
+    @DataTableType
+    public MonetaryTransaction transactionTransformer(Map<String, String> row) {
+
+        return MonetaryTransaction.builder()
+                .id(Long.parseLong(row.get("referenceNumber")))
+                .transactionType(row.get("transactionType"))
+                .transactionDate(Date.valueOf(LocalDate.parse(row.get("date"), formatter)))
+                .sourceAccount(row.get("fromAccount"))
+                .destinationAccount(row.get("destinationAccount"))
+                .amount(new BigDecimal(row.get("amount")))
+                .build();
     }
 
     @Given("I am a jambhala user with credentials {string} and {string}")
@@ -184,16 +206,16 @@ public class ThirdPartyIntegrationStepDefs {
     @Then("I should receive a message saying {string}")
     public void iShouldReceiveAMessageSayingYourFundTransferOfToIsSuccessful(String message) {
 
-       String url = "/v1/push-notifications/new";
+        String url = "/v1/push-notifications/new";
         try {
             MvcResult result = mockMvc.perform(get(url)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON_VALUE)
-                            )
+                    )
                     .andExpect(status().isOk())
                     .andReturn();
 
-            ObjectMapper mapper = new ObjectMapper() ;
+            ObjectMapper mapper = new ObjectMapper();
 
             List<PushNotification> pushNotificationList = mapper.readValue(
                     result.getResponse().getContentAsString(), List.class);
@@ -209,6 +231,36 @@ public class ThirdPartyIntegrationStepDefs {
                 }
             }
             assertThat(messageFound).isTrue();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @And("my transaction history for account number {string} reads like below")
+    public void myTransactionHistoryForAccountNumberReadsLikeBelow(String accountNumber, List<MonetaryTransaction> expected) {
+        try {
+            MvcResult result = mockMvc.perform(get(String.format("/v1/transaction-history/%s", accountNumber))
+                            .header("Authorization", token)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            TransactionHistory txnHistory = new ObjectMapper().readValue(result.getResponse().getContentAsString()
+                    , TransactionHistory.class);
+            List<MonetaryTransaction> actualTransactions = txnHistory.getTransactions();
+
+            assertThat(expected.size()).isEqualTo(actualTransactions.size());
+
+            //then
+            for (MonetaryTransaction ex : expected) {
+                MonetaryTransaction ac = actualTransactions.iterator().next();
+//                assertThat(ex.getTransactionDate()).isEqualTo(ac.getTransactionDate());
+                assertThat(ex.getTransactionType()).isEqualTo(ac.getTransactionType());
+                assertThat(ex.getSourceAccount()).isEqualTo(ac.getSourceAccount());
+                assertThat(ex.getDestinationAccount()).isEqualTo(ac.getDestinationAccount());
+                assertThat(ex.getAmount()).isEqualTo(ac.getAmount());
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

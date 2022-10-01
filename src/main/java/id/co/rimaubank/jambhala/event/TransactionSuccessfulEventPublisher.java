@@ -1,6 +1,6 @@
 package id.co.rimaubank.jambhala.event;
 
-import id.co.rimaubank.jambhala.model.MonetaryTransaction;
+import id.co.rimaubank.jambhala.entity.MonetaryTransaction;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 

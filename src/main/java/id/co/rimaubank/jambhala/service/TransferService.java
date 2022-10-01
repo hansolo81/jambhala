@@ -1,9 +1,9 @@
 package id.co.rimaubank.jambhala.service;
 
+import id.co.rimaubank.jambhala.entity.MonetaryTransaction;
 import id.co.rimaubank.jambhala.event.TransactionSuccessfulEventPublisher;
 import id.co.rimaubank.jambhala.mapper.EsbConverter;
 import id.co.rimaubank.jambhala.model.EsbTransferRes;
-import id.co.rimaubank.jambhala.model.MonetaryTransaction;
 import id.co.rimaubank.jambhala.model.TransferRequest;
 import id.co.rimaubank.jambhala.model.TransferResponse;
 import id.co.rimaubank.jambhala.service.esb.EsbStatus;
@@ -40,6 +40,7 @@ public class TransferService {
                             .destinationAccount(transferRequest.toAccountNumber())
                             .sourceAccount(transferRequest.fromAccountNumber())
                             .payeeName(transferRequest.payeeName())
+                            .transactionType("third party transfer")
                             .transactionDate(new Date())
                             .build());
         }

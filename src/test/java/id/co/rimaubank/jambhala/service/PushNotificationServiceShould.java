@@ -1,8 +1,8 @@
 package id.co.rimaubank.jambhala.service;
 
+import id.co.rimaubank.jambhala.entity.MonetaryTransaction;
 import id.co.rimaubank.jambhala.entity.PushNotification;
 import id.co.rimaubank.jambhala.event.TransactionEvent;
-import id.co.rimaubank.jambhala.model.MonetaryTransaction;
 import id.co.rimaubank.jambhala.repository.PushNotificationRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,6 +83,7 @@ public class PushNotificationServiceShould {
                         .destinationAccount("100000000066")
                         .sourceAccount("100000000099")
                         .payeeName(payeeName)
+                        .transactionType("third party transfer")
                         .transactionDate(new Date())
                         .build());
         given(pushNotificationRepository.save(expected)).willReturn(expected);

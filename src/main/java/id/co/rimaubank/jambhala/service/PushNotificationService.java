@@ -1,8 +1,8 @@
 package id.co.rimaubank.jambhala.service;
 
+import id.co.rimaubank.jambhala.entity.MonetaryTransaction;
 import id.co.rimaubank.jambhala.entity.PushNotification;
 import id.co.rimaubank.jambhala.event.TransactionEvent;
-import id.co.rimaubank.jambhala.model.MonetaryTransaction;
 import id.co.rimaubank.jambhala.repository.PushNotificationRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class PushNotificationService {
         MonetaryTransaction monetaryTransaction = transactionEvent.getMonetaryTransaction();
         save(PushNotification.builder()
                 .custNo(monetaryTransaction.getCustNo())
-                .message(String.format("Your fund transfer of %.2f to %s is successful.", monetaryTransaction.getAmount(), monetaryTransaction.getPayeeName()))
+                .message(String.format("Your %s of %.2f to %s is successful.", monetaryTransaction.getTransactionType(), monetaryTransaction.getAmount(), monetaryTransaction.getPayeeName()))
                 .read(false).build());
     }
 }
