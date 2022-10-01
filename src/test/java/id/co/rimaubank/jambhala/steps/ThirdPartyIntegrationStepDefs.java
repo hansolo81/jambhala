@@ -68,7 +68,7 @@ public class ThirdPartyIntegrationStepDefs {
                 .transactionType(row.get("transactionType"))
                 .transactionDate(Date.valueOf(LocalDate.parse(row.get("date"), formatter)))
                 .sourceAccount(row.get("fromAccount"))
-                .destinationAccount(row.get("destinationAccount"))
+                .destinationAccount(row.get("toAccount"))
                 .amount(new BigDecimal(row.get("amount")))
                 .build();
     }
