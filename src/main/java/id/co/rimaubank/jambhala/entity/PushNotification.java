@@ -17,8 +17,8 @@ public class PushNotification {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "pan", nullable = false)
-    private String pan;
+    @Column(name = "custNo", nullable = false)
+    private String custNo;
 
     @Column(name = "message", nullable = false)
     private String message;

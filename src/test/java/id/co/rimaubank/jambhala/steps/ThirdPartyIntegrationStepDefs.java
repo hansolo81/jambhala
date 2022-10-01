@@ -1,6 +1,7 @@
 package id.co.rimaubank.jambhala.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -24,7 +25,6 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.jetty.webapp.MetaDataComplete.True;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -166,7 +166,7 @@ public class ThirdPartyIntegrationStepDefs {
                 .build();
 
         try {
-            MvcResult result = mockMvc.perform(post(url)
+            mockMvc.perform(post(url)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON_VALUE)
                             .content(new ObjectMapper().writeValueAsString(
@@ -192,15 +192,22 @@ public class ThirdPartyIntegrationStepDefs {
                     .andExpect(status().isOk())
                     .andReturn();
 
-            List<PushNotification> pushNotificationList = new ObjectMapper().readValue(
+            ObjectMapper mapper = new ObjectMapper() ;
+
+            List<PushNotification> pushNotificationList = mapper.readValue(
                     result.getResponse().getContentAsString(), List.class);
 
+            pushNotificationList = mapper.convertValue(pushNotificationList, new TypeReference<List<PushNotification>>() {
+            });
+
+            Boolean messageFound = false;
             for (PushNotification notif : pushNotificationList) {
-                if (message.equals(notif.getMessage())) {
-                    assertThat(True);
+                if (message.equals(notif.getMessage()) && !notif.getRead()) {
+                    messageFound = true;
+                    break;
                 }
             }
-
+            assertThat(messageFound).isTrue();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
