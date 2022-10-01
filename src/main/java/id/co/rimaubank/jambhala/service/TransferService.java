@@ -42,6 +42,7 @@ public class TransferService {
                             .payeeName(transferRequest.payeeName())
                             .transactionType("third party transfer")
                             .transactionDate(new Date())
+                            .status("successful")
                             .build());
         }
         return transferResponse;

@@ -23,9 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,8 +42,6 @@ public class ThirdPartyIntegrationStepDefs {
 
     @Autowired
     MockMvc mockMvc;
-
-    final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public static WireMockServer esbMock = new WireMockServer(9010);
 
@@ -66,7 +62,7 @@ public class ThirdPartyIntegrationStepDefs {
         return MonetaryTransaction.builder()
                 .id(Long.parseLong(row.get("referenceNumber")))
                 .transactionType(row.get("transactionType"))
-                .transactionDate(Date.valueOf(LocalDate.parse(row.get("date"), formatter)))
+                .transactionDate(new Date())
                 .sourceAccount(row.get("fromAccount"))
                 .destinationAccount(row.get("toAccount"))
                 .amount(new BigDecimal(row.get("amount")))

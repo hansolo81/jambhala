@@ -7,5 +7,5 @@ Feature: Intrabank Funds Transfer
     When I transfer 10000.00 from "1000000066" to "1000000099"
     Then I should receive a message saying "Your third party transfer of 10000.00 to padme is successful."
     And my transaction history for account number "1000000066" reads like below
-      | date       | transactionType      | fromAccount | toAccount  | amount   | referenceNumber |
-      | 05-07-2022 | third party transfer | 1000000066  | 1000000099 | 10000.00 | 1               |
+      | date        | transactionType      | fromAccount | toAccount  | amount   | referenceNumber |
+      | TODAYS_DATE | third party transfer | 1000000066  | 1000000099 | 10000.00 | 1               |

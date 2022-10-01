@@ -85,6 +85,7 @@ public class PushNotificationServiceShould {
                         .payeeName(payeeName)
                         .transactionType("third party transfer")
                         .transactionDate(new Date())
+                        .status("successful")
                         .build());
         given(pushNotificationRepository.save(expected)).willReturn(expected);
 

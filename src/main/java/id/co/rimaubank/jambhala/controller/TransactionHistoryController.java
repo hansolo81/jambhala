@@ -1,7 +1,7 @@
 package id.co.rimaubank.jambhala.controller;
 
 import id.co.rimaubank.jambhala.model.TransactionHistory;
-import id.co.rimaubank.jambhala.service.TransactionHistoryService;
+import id.co.rimaubank.jambhala.service.MonetaryTransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransactionHistoryController {
 
 
-    TransactionHistoryService transactionHistoryService;
+    MonetaryTransactionService transactionHistoryService;
 
-    public TransactionHistoryController(TransactionHistoryService transactionHistoryService) {
+    public TransactionHistoryController(MonetaryTransactionService transactionHistoryService) {
         this.transactionHistoryService = transactionHistoryService;
     }
 

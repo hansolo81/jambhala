@@ -1,6 +1,7 @@
 package id.co.rimaubank.jambhala.service;
 
 import id.co.rimaubank.jambhala.entity.MonetaryTransaction;
+import id.co.rimaubank.jambhala.event.TransactionEvent;
 import id.co.rimaubank.jambhala.model.TransactionHistory;
 import id.co.rimaubank.jambhala.repository.MonetaryTransactionRepository;
 import org.junit.Before;
@@ -17,16 +18,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TransactionHistoryServiceShould {
+public class MonetaryTransactionServiceShould {
 
-    TransactionHistoryService transactionHistoryService;
+    MonetaryTransactionService transactionHistoryService;
 
     @Mock
     MonetaryTransactionRepository monetaryTransactionRepository;
 
     @Before
     public void setUp() {
-        this.transactionHistoryService = new TransactionHistoryService(monetaryTransactionRepository);
+        this.transactionHistoryService = new MonetaryTransactionService(monetaryTransactionRepository);
     }
 
     @Test
@@ -47,7 +48,7 @@ public class TransactionHistoryServiceShould {
 
         //given
         given(monetaryTransactionRepository.findByCustNoAndSourceAccount(custNo, accountNo)).willReturn(
-               expectedTransactions
+                expectedTransactions
         );
 
         //when
@@ -65,5 +66,35 @@ public class TransactionHistoryServiceShould {
             assertThat(ex.getAmount()).isEqualTo(ac.getAmount());
         }
 
+    }
+
+    @Test
+    public void processTransactionEvent() {
+        String custNo = "0000000001";
+        String payeeName = "padme";
+        BigDecimal amount = new BigDecimal("10000.00");
+        String accountNo = "100000000066";
+
+        MonetaryTransaction expected = MonetaryTransaction.builder()
+                .custNo(custNo)
+                .amount(amount)
+                .destinationAccount(accountNo)
+                .sourceAccount("100000000099")
+                .payeeName(payeeName)
+                .transactionType("third party transfer")
+                .transactionDate(new Date())
+                .status("successful")
+                .build();
+
+        //given
+        given(monetaryTransactionRepository.save(expected)).willReturn(expected);
+        given(monetaryTransactionRepository.findByCustNoAndSourceAccount(custNo, accountNo)).willReturn(List.of(expected));
+
+        TransactionEvent transactionEvent = new TransactionEvent(new Object(), expected);
+
+        transactionHistoryService.processTransactionEvent(transactionEvent);
+        TransactionHistory transactionHistory = transactionHistoryService.getTransactionHistory(custNo, accountNo);
+        MonetaryTransaction actual = transactionHistory.getTransactions().get(0);
+        assertThat(actual).isEqualTo(expected);
     }
 }
