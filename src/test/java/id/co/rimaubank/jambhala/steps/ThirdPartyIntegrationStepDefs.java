@@ -163,6 +163,7 @@ public class ThirdPartyIntegrationStepDefs {
                 .amount(amount)
                 .fromAccountNumber(fromAccountNumber)
                 .toAccountNumber(toAccountNumber)
+                .payeeName("padme")
                 .build();
 
         try {

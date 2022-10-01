@@ -5,5 +5,6 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record TransferRequest (BigDecimal amount, String fromAccountNumber, String toAccountNumber){
+public record TransferRequest(BigDecimal amount, String fromAccountNumber, String toAccountNumber,
+                              String payeeName) {
 }

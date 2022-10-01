@@ -1,5 +1,6 @@
 package id.co.rimaubank.jambhala.service;
 
+import id.co.rimaubank.jambhala.event.TransactionSuccessfulEventPublisher;
 import id.co.rimaubank.jambhala.mapper.EsbConverter;
 import id.co.rimaubank.jambhala.model.EsbTransferRes;
 import id.co.rimaubank.jambhala.model.TransferRequest;
@@ -25,9 +26,11 @@ public class TransferServiceShould {
     @Mock
     TransferEsb transferEsb;
 
+    @Mock
+    TransactionSuccessfulEventPublisher transactionEventPublisher;
     @Before
     public void initialize() {
-        transferService = new TransferService(transferEsb);
+        transferService = new TransferService(transferEsb, transactionEventPublisher);
     }
 
 
@@ -46,8 +49,8 @@ public class TransferServiceShould {
                                 .statusDesc(EsbStatus.SUCCESS.getReasonPhrase())
                                 .build()
                 );
-
-        TransferResponse transferResponse = transferService.doTransfer(transferRequest);
+        String custNo = "0000000001";
+        TransferResponse transferResponse = transferService.doTransfer(transferRequest, custNo);
         EsbStatus esbStatus = transferResponse.getEsbStatus();
         assertThat(esbStatus.isSuccessful()).isTrue();
     }
