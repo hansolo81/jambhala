@@ -87,7 +87,7 @@ public class PushNotificationServiceShould {
                         .transactionDate(new Date())
                         .status("successful")
                         .build());
-        given(pushNotificationRepository.save(expected)).willReturn(expected);
+//        given(pushNotificationService.save(expected)).willReturn(expected);
 
         given(pushNotificationRepository.findByCustNo(custNo))
                 .willReturn(List.of(expected));
