@@ -2,13 +2,13 @@ server:
   port: 8082
 
 keycloak-server:
-  uri: http://127.0.0.1:8080/realms/maybank
+  uri: http://127.0.0.1:8080/realms/rimaubank
   openid-uri: ${keycloak-server.uri}/protocol/openid-connect
 
 spring:
   security:
     oauth2:
-      resourceserver:
+      resource-server:
         jwt:
           issuer-uri: ${keycloak-server.uri}
   datasource:
@@ -21,9 +21,8 @@ spring:
 
 esb:
   url:
-    accountservice: http://esb.maybank.co.id:9180/account-service
-    trxservice: http://esb.maybank.co.id:9180/trx-service
-
+    account-service: http://esb.rimaubank.co.id:9010/account-service
+    transfer-service: http://esb.rimaubank.co.id:9010/transfer-service
 
 logging:
   level:
