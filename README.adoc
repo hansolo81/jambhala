@@ -1,6 +1,6 @@
 # JAMBHALA
 
-![](https://github.com/hansolo81/jambhala/workflows/Maven%20Package/badge.svg)
+image:https://github.com/hansolo81/jambhala/workflows/Maven%20Package/badge.svg?branch=master["master", link="https://github.com/hansolo81/jambhala/workflows/Maven%20Package/badge.svg"]
 
 ### Objective
 A demo app to showcase Outside-In TDD with an actual banking use-case
