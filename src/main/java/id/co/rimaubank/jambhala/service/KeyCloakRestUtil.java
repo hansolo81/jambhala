@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +18,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class KeyCloakRestUtil {
-    private static final String CONNECT_TOKEN = "http://127.0.0.1:8080/realms/rimaubank/protocol/openid-connect/token";
+
+    @Value("${keycloak-server.openid-uri:http://127.0.0.1:8080/realms/rimaubank/protocol/openid-connect/token}")
+    private String connectToken;
 
     RestTemplate restTemplate;
 
@@ -37,7 +40,7 @@ public class KeyCloakRestUtil {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
         ResponseEntity<String> stringResponseEntity = restTemplate
-                .postForEntity(CONNECT_TOKEN, request, String.class);
+                .postForEntity(connectToken, request, String.class);
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode jsonNode = mapper.readTree(stringResponseEntity.getBody());
