@@ -1,4 +1,4 @@
-package id.co.rimaubank.jambhala.steps;
+package id.co.rimaubank.jambhala.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;

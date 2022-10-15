@@ -42,9 +42,6 @@ public class ThirdPartyIntegrationStepDefs {
     private String token;
 
     @Autowired
-    KeyCloakRestUtil keyCloakRestUtil;
-
-    @Autowired
     MockMvc mockMvc;
 
     public static WireMockServer esbMock = new WireMockServer(9010);
