@@ -37,3 +37,6 @@ jobs:
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
+        
+    - name: JUnit Report Action
+      uses: mikepenz/action-junit-report@v3.5.2
