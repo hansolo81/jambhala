@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class KeyCloakRestUtil {
 
-    @Value("${keycloak-server.openid-uri:http://127.0.0.1:8080/realms/rimaubank/protocol/openid-connect/token}")
+    @Value("${keycloak-server.openid-uri:http://keycloak.rimaubank.co.id:8080/realms/rimaubank/protocol/openid-connect/token}")
     private String connectToken;
 
     RestTemplate restTemplate;
