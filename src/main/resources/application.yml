@@ -28,4 +28,4 @@ esb:
 
 logging:
   level:
-    org.springframework.security: info
+    org.springframework.security: warn
