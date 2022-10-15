@@ -2,7 +2,7 @@ server:
   port: 8082
 
 keycloak-server:
-  uri: http://127.0.0.1:8080/realms/rimaubank
+  uri: http://localhost:8000/auth/realms/rimaubank
   openid-uri: ${keycloak-server.uri}/protocol/openid-connect
 
 spring:

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.tngtech.keycloakmock.api.KeycloakMock;
 import id.co.rimaubank.jambhala.entity.MonetaryTransaction;
 import id.co.rimaubank.jambhala.entity.PushNotification;
 import id.co.rimaubank.jambhala.model.*;
@@ -28,10 +29,13 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.tngtech.keycloakmock.api.ServerConfig.aServerConfig;
+import static com.tngtech.keycloakmock.api.TokenConfig.aTokenConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @Slf4j
 public class ThirdPartyIntegrationStepDefs {
@@ -45,14 +49,19 @@ public class ThirdPartyIntegrationStepDefs {
 
     public static WireMockServer esbMock = new WireMockServer(9010);
 
+    KeycloakMock keycloakMock;
+
     @Before
     public void init() {
         esbMock.start();
+        keycloakMock = new KeycloakMock(aServerConfig().withPort(8000).withDefaultRealm("rimaubank").build());
+        keycloakMock.start();
     }
 
     @After
     public void cleanup() {
         esbMock.stop();
+        keycloakMock.stop();
     }
 
 
@@ -71,7 +80,13 @@ public class ThirdPartyIntegrationStepDefs {
 
     @Given("I am a jambhala user with credentials {string} and {string}")
     public void iAmAJambhalaUserWithCredentialsAnd(String username, String password) {
-        token = keyCloakRestUtil.getToken(username, password, "jambhala");
+
+        token = "Bearer " + keycloakMock.getAccessToken(aTokenConfig()
+                .withPreferredUsername(username)
+                .withRealm("rimaubank")
+                .withAuthorizedParty("jambhala")
+                .withClaim("custNo", "0000000001")
+                .build());
         log.info(token);
         assertThat(token).isNotBlank();
     }
