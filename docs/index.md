@@ -4,11 +4,6 @@ Jambhala is the online banking application for a fictional Rimaubank
 
 ### What can it do?
 - For list of features, go to [JIRA](https://zakiyunus.atlassian.net/jira/software/c/projects/JAMBHALA/boards/1)
-- For technical specs, checkout the following
-  
-{% include toc.html html=content %}
-
-
 
 ### What is the tech stack?
 - Spring Boot

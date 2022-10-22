@@ -151,14 +151,14 @@ Explain the solution is, how it works and the extent of the work involved.
 |---------------------------------------------|-----------|
 | [MonetaryTransaction](#monetarytransaction) | Query     | 
 
-## Entities
+### Entities
 
-### PushNotification
+#### PushNotification
 - custNo
 - message
 - isRead
 
-### MonetaryTransaction
+#### MonetaryTransaction
 - custNo
 - amount
 - sourceAccount
