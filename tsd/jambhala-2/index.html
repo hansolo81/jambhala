@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="https://hansolo81.github.io/jambhala/tsd/jambhala-2/">
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>jambhala-2 - Jambhala Docs</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "jambhala-2";
+    var mkdocs_page_input_path = "tsd/jambhala-2.md";
+    var mkdocs_page_url = "/jambhala/tsd/jambhala-2/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Jambhala Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">TSD</span></p>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">jambhala-2</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#background-research">Background &amp; research</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#problem-statement">Problem statement</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#goals">Goals</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#hypothesis">﻿Hypothesis</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scope">Scope</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#technical-solution">Technical solution</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#high-level-design">High Level Design</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#api-internals">API Internals</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#1-balance-inquiry">1. Balance Inquiry</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#2-account-holder-inquiry">2. Account Holder Inquiry</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#3-perform-intrabank-transfer">3. Perform Intrabank Transfer</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#4-get-new-push-notifications">4. Get New Push Notifications</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#5-get-transaction-history">5. Get Transaction History</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#entities">Entities</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pushnotification">PushNotification</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monetarytransaction">MonetaryTransaction</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#open-questions">Open questions</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Jambhala Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>TSD &raquo;</li>
+        
+      
+    
+    <li>jambhala-2</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="tech-specs-for-jambhala-2">Tech Specs for <a href="https://zakiyunus.atlassian.net/browse/JAMBHALA-2">JAMBHALA-2</a></h1>
+<h2 id="background-research">Background &amp; research</h2>
+<p>Normally, a rimaubank customer also has close family members or friends who are also rimaubank customer. This function allows the said rimaubank customer to send money to their family or friends. Extensive usage of this function means that funds stay and increase within maybank deposit accounts, maintaining or lowering the bank's cost of funds</p>
+<h2 id="problem-statement">Problem statement</h2>
+<p>As a rimaubank customer, I would like to do funds transfer from my rimaubank account to another rimaubank account so I can send money to my friends or family</p>
+<h2 id="goals">Goals</h2>
+<ul>
+<li>List goals<ul>
+<li>Customer should need at most 4 steps to transfer money</li>
+</ul>
+</li>
+<li>KPIs<ul>
+<li>1000 intrabank funds transfer between rimaubank accounts per month</li>
+<li>Total value of IDR 1Mio of funds exchanged between rimaubank accounts per month</li>
+</ul>
+</li>
+</ul>
+<h2 id="hypothesis">﻿Hypothesis</h2>
+<p>If we make it frictionless for customers to transfer money online between rimaubank accounts, customers are more likely to recommend their friends and family to open or maintain existing rimaubank account.</p>
+<h2 id="scope">Scope</h2>
+<p>Explain the solution is, how it works and the extent of the work involved.</p>
+<ol>
+<li>Requirements &gt; See <a href="https://zakiyunus.atlassian.net/browse/JAMBHALA-2">JAMBHALA-2</a><ul>
+<li>The customer must have a valid rimaubank online banking credentials</li>
+<li>The source account must have sufficient funds to transfer the money</li>
+<li>The recepient account must be a valid rimaubank account</li>
+<li>Upon successful transfer, the sender will receive a notification saying that the transfer to recipient is successful with amount and date</li>
+<li>When the sender checks their transaction history, the transfer activity must be reflected</li>
+</ul>
+</li>
+<li>Future evolutions<ul>
+<li>There must be a 2nd factor authentication to protect the sender from fraudsters</li>
+<li>There should be an option for customer to repeat the same transaction</li>
+</ul>
+</li>
+<li>Out of scope<ul>
+<li>Email notification</li>
+</ul>
+</li>
+</ol>
+<h2 id="technical-solution">Technical solution</h2>
+<h3 id="high-level-design">High Level Design</h3>
+<ol>
+<li>Login should produce an Oauth Token that can be used to call the remaining API's</li>
+<li>
+<p>There should be 5 main API's representing each test steps</p>
+</li>
+<li>
+<p>Balance Inquiry</p>
+</li>
+<li>Account Holder name Inquiry</li>
+<li>Perform fund transfer</li>
+<li>Get new push notifications</li>
+<li>Get transaction history</li>
+</ol>
+<h3 id="api-internals">API Internals</h3>
+<h4 id="1-balance-inquiry">1. Balance Inquiry</h4>
+<p><code>GET /accounts/&lt;account-number&gt;/balance-inquiry</code></p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>account-number</td>
+<td><code>{ accountNumber, availableBalance }</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>Security</em></p>
+<ul>
+<li>Bearer rimaubank JWT token with a valid <em>custNo</em> claim</li>
+</ul>
+<p><em>Integrations</em></p>
+<table>
+<thead>
+<tr>
+<th>Subsystem</th>
+<th>Operation</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ESB</td>
+<td>POST</td>
+<td>http://${esb.host-name}:9010/account-service</td>
+<td>To get account details</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-account-holder-inquiry">2. Account Holder Inquiry</h4>
+<p><code>GET /accounts/&lt;account-number&gt;/holder-name</code></p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>account-number</td>
+<td><code>{ accountNumber, accountHolderName }</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>Security</em>
+  - Bearer rimaubank JWT token </p>
+<p><em>Integrations</em></p>
+<table>
+<thead>
+<tr>
+<th>Subsystem</th>
+<th>Operation</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ESB</td>
+<td>POST</td>
+<td>http://${esb.host-name}:9010/account-service</td>
+<td>To get account details</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-perform-intrabank-transfer">3. Perform Intrabank Transfer</h4>
+<p><code>POST /transfer/intrabank</code> </p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>account-number</td>
+<td><code>{ accountNumber, accountHolderName }</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>Security</em>
+  - Bearer rimaubank JWT token with a valid <em>custNo</em> claim</p>
+<p><em>Integrations</em></p>
+<table>
+<thead>
+<tr>
+<th>Subsystem</th>
+<th>Operation</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ESB</td>
+<td>POST</td>
+<td>http://${esb.host-name}:9010/transfer-service</td>
+<td>To perform funds transfer</td>
+</tr>
+</tbody>
+</table>
+<p><em>Events</em>  </p>
+<table>
+<thead>
+<tr>
+<th>Transmitted</th>
+<th>Consumed By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MonetaryTransaction</td>
+<td><code>PushNotificationService, TransactionHistoryService</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>Sequence</em>
+<img alt="" src="../transfer.svg" /></p>
+<h4 id="4-get-new-push-notifications">4. Get New Push Notifications</h4>
+<p><code>GET /push-notifications/new</code></p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td><code>List({ message, isRead })</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>Security</em>
+  - Bearer rimaubank JWT token  with a valid <em>custNo</em> claim</p>
+<p><em>Entities</em> </p>
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#pushnotification">PushNotification</a></td>
+<td>Query</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5-get-transaction-history">5. Get Transaction History</h4>
+<p><code>GET /transaction-history</code></p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td><code>List({ txnId, amount, sourceAccount, destinationAccount, payeeName, transactionType, transactionDate, status })</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>Security</em>
+  - Bearer rimaubank JWT token  with a valid <em>custNo</em> claim</p>
+<p><em>Entities</em> </p>
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#monetarytransaction">MonetaryTransaction</a></td>
+<td>Query</td>
+</tr>
+</tbody>
+</table>
+<h2 id="entities">Entities</h2>
+<h3 id="pushnotification">PushNotification</h3>
+<ul>
+<li>custNo</li>
+<li>message</li>
+<li>isRead</li>
+</ul>
+<h3 id="monetarytransaction">MonetaryTransaction</h3>
+<ul>
+<li>custNo</li>
+<li>amount</li>
+<li>sourceAccount</li>
+<li>destinationAccount</li>
+<li>payeeName</li>
+<li>transactionType</li>
+<li>transactionDate</li>
+<li>status</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>[ ] Should we notify the recipient of the incoming transfer?</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../.." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../.." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

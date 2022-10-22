@@ -1,0 +1,20 @@
+@startuml
+
+autonumber
+participant PushNotificationService as pns
+entity PushNotification as pn
+participant TransactionHistoryService as ths
+entity MonetaryTransaction as mt
+queue q
+participant TransferService as ts
+participant ESB as esb
+
+ts -> esb: doTransfer
+ts <-- esb: <response OK>
+ts -> q: pub <monetarytxn>
+pns -> q: sub <monetarytxn>
+pns -> pn: save
+ths -> q: sub <monetarytxn>
+ths -> mt: save
+
+@enduml
