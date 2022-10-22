@@ -1,9 +1,4 @@
 
-title: Technical Specs
-created at: Sat Oct 22 2022 12:33:17 GMT+0000 (Coordinated Universal Time)
-updated at: Sat Oct 22 2022 12:33:17 GMT+0000 (Coordinated Universal Time)
----
-
 # Tech Specs for [JAMBHALA-2](https://zakiyunus.atlassian.net/browse/JAMBHALA-2)
 
 ## Background & research
@@ -27,21 +22,6 @@ As a rimaubank customer, I would like to do funds transfer from my rimaubank acc
 
 If we make it frictionless for customers to transfer money online between rimaubank accounts, customers are more likely to recommend their friends and family to open or maintain existing rimaubank account.
 
-## **Technical solution**
-
-1. Login should produce an Oauth Token that can be used to call the remaining API's
-2. There should be 4 main API's involved
-````
-   - GET /accounts/<account-number>/balance-inquiry
-   
-   - GET /accounts/<account-number>/holder-name
-   
-   - POST /transfer/intra-bank
-   
-   - GET /push-notifications/new
-   
-   - GET /transaction-history/<account-number>
-````
 
 ## Scope
 
@@ -59,10 +39,135 @@ Explain the solution is, how it works and the extent of the work involved.
 3.  Out of scope
     - Email notification
 
-## Designs and assets
 
-Add any necessary figma project link, hi-fi mockups, SVGs, font files, images, prototypes...
+## Technical solution
 
+### High Level Design
+1. Login should produce an Oauth Token that can be used to call the remaining API's
+2. There should be 5 main API's representing each test steps
+
+   - Balance Inquiry
+   - Account Holder name Inquiry
+   - Perform fund transfer
+   - Get new push notifications
+   - Get transaction history
+   
+
+### API Internals
+
+#### 1. Balance Inquiry
+````GET /accounts/<account-number>/balance-inquiry````
+
+| Input | Output                                      |
+|----- |---------------------------------------------|
+|account-number | ````{ accountNumber, availableBalance }```` |
+
+*Security*
+ 
+- Bearer rimaubank JWT token with a valid *custNo* claim
+ 
+*Integrations*
+ 
+| Subsystem | Operation | Endpoint | Purpose                 |
+|--------|-------|-------|-------------------------|
+| ESB | POST | http://${esb.host-name}:9010/account-service | To get account details  |
+ 
+
+
+#### 2. Account Holder Inquiry
+````GET /accounts/<account-number>/holder-name````
+
+| Input | Output                                       |
+|----- |----------------------------------------------|
+|account-number | ````{ accountNumber, accountHolderName }```` |
+
+*Security*
+  - Bearer rimaubank JWT token 
+     
+*Integrations*
+ 
+  | Subsystem | Operation | Endpoint | Purpose                 |
+  |--------|-------|-------|-------------------------|
+  | ESB | POST | http://${esb.host-name}:9010/account-service | To get account details  |
+ 
+
+#### 3. Perform Intrabank Transfer
+````POST /transfer/intrabank```` 
+
+
+| Input | Output                                       |
+|----- |----------------------------------------------|
+|account-number | ````{ accountNumber, accountHolderName }```` |
+
+*Security*
+  - Bearer rimaubank JWT token with a valid *custNo* claim
+     
+*Integrations*
+ 
+  | Subsystem | Operation | Endpoint                                      | Purpose                   |
+  |--------|-----------------------------------------------|---------------------------|-------------------------|
+  | ESB | POST | http://${esb.host-name}:9010/transfer-service | To perform funds transfer |
+ 
+*Events*  
+
+| Transmitted | Consumed By                                                 |
+|----|-------------------------------------------------------------|
+| MonetaryTransaction| ````PushNotificationService, TransactionHistoryService ```` |
+
+
+*Sequence*
+![](transfer.svg)
+
+#### 4. Get New Push Notifications
+````GET /push-notifications/new````
+
+| Input | Output                            |
+|----- |-----------------------------------|
+| | ````List({ message, isRead })```` |
+
+*Security*
+  - Bearer rimaubank JWT token  with a valid *custNo* claim
+     
+*Entities* 
+
+| Entity                                | Operation |
+|---------------------------------------|-----------|
+| [PushNotification](#pushnotification) | Query     | 
+
+
+#### 5. Get Transaction History
+````GET /transaction-history````
+
+| Input | Output                                                                                                                  |
+|----- |-------------------------------------------------------------------------------------------------------------------------|
+| | ````List({ txnId, amount, sourceAccount, destinationAccount, payeeName, transactionType, transactionDate, status })```` |
+
+*Security*
+  - Bearer rimaubank JWT token  with a valid *custNo* claim
+     
+*Entities* 
+
+| Entity                                      | Operation |
+|---------------------------------------------|-----------|
+| [MonetaryTransaction](#monetarytransaction) | Query     | 
+
+## Entities
+
+### PushNotification
+- custNo
+- message
+- isRead
+
+### MonetaryTransaction
+- custNo
+- amount
+- sourceAccount
+- destinationAccount
+- payeeName
+- transactionType
+- transactionDate
+- status
+ 
 ## Open questions
 
 -   [ ] Should we notify the recipient of the incoming transfer?

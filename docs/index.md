@@ -1,25 +1,23 @@
+# JAMBHALA Documentation Site
+### What is Jambhala?
+Jambhala is the online banking application for a fictional Rimaubank
 
-image:https://github.com/hansolo81/jambhala/workflows/Maven%20Package/badge.svg?branch=master["master", link="https://github.com/hansolo81/jambhala/workflows/Maven%20Package/badge.svg"]
+### What can it do?
+- For list of features, go to [JIRA](https://zakiyunus.atlassian.net/jira/software/c/projects/JAMBHALA/boards/1)
+- For technical specs, checkout the following
+  
+{% include toc.html html=content %}
 
-### Objective
-A demo app to showcase Outside-In TDD with an actual banking use-case
 
-### Problem description - Intra bank funds transfer
-Create an application that allows customer to transfer funds from her account to another account within the same bank
 
-### What we'll use
-* JUnit
-* Cucumber (https://cucumber.io/)
-* AssertJ (https://assertj.github.io/doc/)
-* Keycloak (https://www.keycloak.org/)
-* Wiremock (https://wiremock.org/)
+### What is the tech stack?
+- Spring Boot
+- Keycloak
+- H2 (at the moment) 
+- Cucumber
 
-### Acceptance criteria
-    Given I am a jambhala user with credentials "anakin" and "ihateyou"
-    And I have a valid account number "1000000066" with balance of 10001.00
-    And my wife "padme" has a valid account number "1000000099"
-    When I transfer 10000.00 from "1000000066" to "1000000099"
-    Then I should receive a message saying Your fund transfer of 10000.00 to "padme" is successful
-    And my transaction history for account number "1000000066" reads like below
-      | date       | transactionDetails   | fromAccount | toAccount  | amount | referenceNumber |
-      | 05-07-2022 | third party transfer | 1000000066  | 1000000099 | 10000  | 000000001       |
+### How do I contribute?
+1. git clone https://github.com/hansolo81/jambhala.git
+2. implement a feature that you feel is useful
+3. do a PR
+
