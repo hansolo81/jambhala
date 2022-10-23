@@ -136,7 +136,7 @@
               
                 <h1 id="tech-specs-for-jambhala-2">Tech Specs for <a href="https://zakiyunus.atlassian.net/browse/JAMBHALA-2">JAMBHALA-2</a></h1>
 <h2 id="background-research">Background &amp; research</h2>
-<p>Normally, a rimaubank customer also has close family members or friends who are also rimaubank customer. This function allows the said rimaubank customer to send money to their family or friends. Extensive usage of this function means that funds stay and increase within maybank deposit accounts, maintaining or lowering the bank's cost of funds</p>
+<p>Normally, a rimaubank customer also has close family members or friends who are also rimaubank customer. This function allows the said rimaubank customer to send money to their family or friends. Extensive usage of this function means that funds stay and increase within rimaubank deposit accounts, maintaining or lowering the bank's cost of funds</p>
 <h2 id="problem-statement">Problem statement</h2>
 <p>As a rimaubank customer, I would like to do funds transfer from my rimaubank account to another rimaubank account so I can send money to my friends or family</p>
 <h2 id="goals">Goals</h2>
@@ -176,19 +176,13 @@
 </ol>
 <h2 id="technical-solution">Technical solution</h2>
 <h3 id="high-level-design">High Level Design</h3>
-<ol>
-<li>Login should produce an Oauth Token that can be used to call the remaining API's</li>
-<li>
-<p>There should be 5 main API's representing each test steps</p>
-</li>
-<li>
-<p>Balance Inquiry</p>
-</li>
-<li>Account Holder name Inquiry</li>
-<li>Perform fund transfer</li>
-<li>Get new push notifications</li>
-<li>Get transaction history</li>
-</ol>
+<p>Login should produce an Oauth Token that can be used to call the remaining API's.</p>
+<p>There should be 5 main API's representing each test steps
+   - Balance Inquiry
+   - Account Holder name Inquiry
+   - Perform fund transfer
+   - Get new push notifications
+   - Get transaction history</p>
 <h3 id="api-internals">API Internals</h3>
 <h4 id="1-balance-inquiry">1. Balance Inquiry</h4>
 <p><code>GET /accounts/&lt;account-number&gt;/balance-inquiry</code></p>
@@ -210,6 +204,52 @@
 <ul>
 <li>Bearer rimaubank JWT token with a valid <em>custNo</em> claim</li>
 </ul>
+<p><em>Http Status</em></p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Invalid Token</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Refer Response Codes below</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Account Not found</td>
+</tr>
+</tbody>
+</table>
+<p><em>Response Codes</em></p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>Account Dormant</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Account Suspended</td>
+</tr>
+</tbody>
+</table>
 <p><em>Integrations</em></p>
 <table>
 <thead>
@@ -247,6 +287,52 @@
 </table>
 <p><em>Security</em>
   - Bearer rimaubank JWT token </p>
+<p><em>Http Status</em></p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Invalid Token</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Refer Response Codes below</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Account Not found</td>
+</tr>
+</tbody>
+</table>
+<p><em>Response Codes</em></p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>Account Dormant</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Account Suspended</td>
+</tr>
+</tbody>
+</table>
 <p><em>Integrations</em></p>
 <table>
 <thead>
@@ -277,13 +363,59 @@
 </thead>
 <tbody>
 <tr>
-<td>account-number</td>
-<td><code>{ accountNumber, accountHolderName }</code></td>
+<td><code>{ amount, sourceAccount, destinationAccount, payeeName }</code></td>
+<td><code>{ responseCode, responseMsg }</code></td>
 </tr>
 </tbody>
 </table>
 <p><em>Security</em>
   - Bearer rimaubank JWT token with a valid <em>custNo</em> claim</p>
+<p><em>Http Status</em></p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Invalid Token</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Refer Response Codes below</td>
+</tr>
+</tbody>
+</table>
+<p><em>Response Codes</em></p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>Insufficient Funds</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Transaction Expired</td>
+</tr>
+<tr>
+<td>03</td>
+<td>Invalid Amount</td>
+</tr>
+</tbody>
+</table>
 <p><em>Integrations</em></p>
 <table>
 <thead>
@@ -338,6 +470,29 @@
 </table>
 <p><em>Security</em>
   - Bearer rimaubank JWT token  with a valid <em>custNo</em> claim</p>
+<p><em>Http Status</em></p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Invalid Token</td>
+</tr>
+<tr>
+<td>404</td>
+<td>No new push notifications</td>
+</tr>
+</tbody>
+</table>
 <p><em>Entities</em> </p>
 <table>
 <thead>
@@ -371,6 +526,52 @@
 </table>
 <p><em>Security</em>
   - Bearer rimaubank JWT token  with a valid <em>custNo</em> claim</p>
+<p><em>Http Status</em></p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Invalid Token</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Refer Response Codes below</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Account Not found</td>
+</tr>
+</tbody>
+</table>
+<p><em>Response Codes</em></p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>Account Dormant</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Account Suspended</td>
+</tr>
+</tbody>
+</table>
 <p><em>Entities</em> </p>
 <table>
 <thead>
