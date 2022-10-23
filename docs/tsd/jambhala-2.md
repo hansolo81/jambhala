@@ -3,7 +3,7 @@
 
 ## Background & research
 
-Normally, a rimaubank customer also has close family members or friends who are also rimaubank customer. This function allows the said rimaubank customer to send money to their family or friends. Extensive usage of this function means that funds stay and increase within maybank deposit accounts, maintaining or lowering the bank's cost of funds
+Normally, a rimaubank customer also has close family members or friends who are also rimaubank customer. This function allows the said rimaubank customer to send money to their family or friends. Extensive usage of this function means that funds stay and increase within rimaubank deposit accounts, maintaining or lowering the bank's cost of funds
 
 
 ## Problem statement
@@ -43,9 +43,9 @@ Explain the solution is, how it works and the extent of the work involved.
 ## Technical solution
 
 ### High Level Design
-1. Login should produce an Oauth Token that can be used to call the remaining API's
-2. There should be 5 main API's representing each test steps
+Login should produce an Oauth Token that can be used to call the remaining API's.
 
+There should be 5 main API's representing each test steps
    - Balance Inquiry
    - Account Holder name Inquiry
    - Perform fund transfer
@@ -65,6 +65,22 @@ Explain the solution is, how it works and the extent of the work involved.
 *Security*
  
 - Bearer rimaubank JWT token with a valid *custNo* claim
+
+*Http Status*
+
+| Status | Meaning                    |
+|--------|----------------------------|
+| 200    | Success                    |
+| 401    | Invalid Token              |
+| 400    | Refer Response Codes below |
+| 404    | Account Not found          |
+
+*Response Codes*
+
+| Code | Meaning |
+| ---- | ---- |
+| 01 | Account Dormant |
+| 02 | Account Suspended |
  
 *Integrations*
  
@@ -83,6 +99,23 @@ Explain the solution is, how it works and the extent of the work involved.
 
 *Security*
   - Bearer rimaubank JWT token 
+
+*Http Status*
+
+| Status | Meaning                    |
+|--------|----------------------------|
+| 200    | Success                    |
+| 401    | Invalid Token              |
+| 400    | Refer Response Codes below |
+| 404    | Account Not found          |
+
+*Response Codes*
+
+| Code | Meaning |
+| ---- | ---- |
+| 01 | Account Dormant |
+| 02 | Account Suspended |
+ 
      
 *Integrations*
  
@@ -95,12 +128,31 @@ Explain the solution is, how it works and the extent of the work involved.
 ````POST /transfer/intrabank```` 
 
 
-| Input | Output                                       |
-|----- |----------------------------------------------|
-|account-number | ````{ accountNumber, accountHolderName }```` |
+| Input                                                    | Output                                |
+|----------------------------------------------------------|---------------------------------------|
+| ````{ amount, sourceAccount, destinationAccount, payeeName }```` | ````{ responseCode, responseMsg }```` |
 
 *Security*
   - Bearer rimaubank JWT token with a valid *custNo* claim
+
+
+*Http Status*
+
+| Status | Meaning                    |
+|--------|----------------------------|
+| 200    | Success                    |
+| 401    | Invalid Token              |
+| 400    | Refer Response Codes below |
+
+
+*Response Codes*
+
+| Code | Meaning             |
+| ---- |---------------------|
+| 01 | Insufficient Funds  |
+| 02 | Transaction Expired |
+| 03 | Invalid Amount      |
+ 
      
 *Integrations*
  
@@ -127,6 +179,16 @@ Explain the solution is, how it works and the extent of the work involved.
 
 *Security*
   - Bearer rimaubank JWT token  with a valid *custNo* claim
+
+*Http Status*
+
+| Status | Meaning                    |
+|--------|----------------------------|
+| 200    | Success                    |
+| 401    | Invalid Token              |
+| 404    | No new push notifications  |
+
+ 
      
 *Entities* 
 
@@ -144,6 +206,24 @@ Explain the solution is, how it works and the extent of the work involved.
 
 *Security*
   - Bearer rimaubank JWT token  with a valid *custNo* claim
+
+
+*Http Status*
+
+| Status | Meaning                    |
+|--------|----------------------------|
+| 200    | Success                    |
+| 401    | Invalid Token              |
+| 400    | Refer Response Codes below |
+| 404    | Account Not found          |
+
+*Response Codes*
+
+| Code | Meaning |
+| ---- | ---- |
+| 01 | Account Dormant |
+| 02 | Account Suspended |
+ 
      
 *Entities* 
 
