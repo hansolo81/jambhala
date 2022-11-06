@@ -1,0 +1,7 @@
+site_name: Jambhala Docs
+site_url: https://hansolo81.github.io/jambhala/
+nav:
+    - Home: index.md
+    - TSD: 
+      - jambhala-2: tsd/jambhala-2.md
+theme: readthedocs
