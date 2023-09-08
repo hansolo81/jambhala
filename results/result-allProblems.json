@@ -1,0 +1,94 @@
+{"version":"3","listProblem":[{
+  "tool": "Code Inspection",
+  "category": "Probable bugs",
+  "type": "Unused assignment",
+  "tags": [
+    "JAVA"
+  ],
+  "severity": "High",
+  "comment": "Variable 'transactions' initializer 'new ArrayList<>()' is redundant",
+  "detailsInfo": "Reports assignment values that are not used after assignment. If the assignment value is unused, it's better to remove the assignment to shorten the code and avoid redundant allocations.\n\nThe following cases are reported:\n\n* variables that are never read after assignment\n* variables that are always overwritten with a new value before being read\n* variable initializers that are redundant (for one of the two reasons above)\n\nConfigure the inspection:\n\n\nUse the **Report redundant initializers** option to report redundant initializers:\n\n\n      int getI() {\n        int i = 0; // redundant initialization\n        i = 2;\n        return i;\n      }\n\n\nUse the **Report prefix expressions that can be replaced with binary expressions** option to report cases\nwhere an `++i` expression may be replaced with `i + 1`:\n\n\n      int preInc(int value) {\n        int res = value;\n        return ++res;\n      }\n\n\nUse the **Report postfix expressions where the changed value is not used** option to report `i++` cases\nwhere the value of `i` is not used later:\n\n\n      int postInc(int value) {\n        int res = value;\n        return res++;\n      }\n\n\nUse the **Report pattern variables whose values are never used** option to report cases where the value of a pattern variable\nis overwritten before it is read:\n\n\n      if (object instanceof String s) {\n          s = \"hello\";\n          System.out.println(s);\n      }\n\n\nUse the **Report iteration parameters whose values are never used** option to report cases where the value of an iteration parameter\nof an enhanced `for` statements is overwritten before it is read:\n\n\n      for (String arg : args) {\n          arg = \"test\";\n          System.out.println(arg);\n      }\n",
+  "sources": [
+    {
+      "type": "file",
+      "path": "src/main/java/id/co/rimaubank/jambhala/model/TransactionHistory.java",
+      "language": "JAVA",
+      "line": 14,
+      "offset": 54,
+      "length": 17,
+      "code": {
+        "startLine": 12,
+        "length": 17,
+        "offset": 88,
+        "surroundingCode": "public class TransactionHistory {\n\n    private List<MonetaryTransaction> transactions = new ArrayList<>();\n\n    public TransactionHistory(List<MonetaryTransaction> transactions) {"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "jambhala",
+    "inspectionName": "UnusedAssignment"
+  },
+  "hash": "0df402cfcfb40374196be5d8b53a005ee660dd4cf4b018792f201c5a480a836c"
+},{
+  "tool": "Code Inspection",
+  "category": "Probable bugs",
+  "type": "Unused assignment",
+  "tags": [
+    "JAVA"
+  ],
+  "severity": "High",
+  "comment": "Variable 'request' initializer 'null' is redundant",
+  "detailsInfo": "Reports assignment values that are not used after assignment. If the assignment value is unused, it's better to remove the assignment to shorten the code and avoid redundant allocations.\n\nThe following cases are reported:\n\n* variables that are never read after assignment\n* variables that are always overwritten with a new value before being read\n* variable initializers that are redundant (for one of the two reasons above)\n\nConfigure the inspection:\n\n\nUse the **Report redundant initializers** option to report redundant initializers:\n\n\n      int getI() {\n        int i = 0; // redundant initialization\n        i = 2;\n        return i;\n      }\n\n\nUse the **Report prefix expressions that can be replaced with binary expressions** option to report cases\nwhere an `++i` expression may be replaced with `i + 1`:\n\n\n      int preInc(int value) {\n        int res = value;\n        return ++res;\n      }\n\n\nUse the **Report postfix expressions where the changed value is not used** option to report `i++` cases\nwhere the value of `i` is not used later:\n\n\n      int postInc(int value) {\n        int res = value;\n        return res++;\n      }\n\n\nUse the **Report pattern variables whose values are never used** option to report cases where the value of a pattern variable\nis overwritten before it is read:\n\n\n      if (object instanceof String s) {\n          s = \"hello\";\n          System.out.println(s);\n      }\n\n\nUse the **Report iteration parameters whose values are never used** option to report cases where the value of an iteration parameter\nof an enhanced `for` statements is overwritten before it is read:\n\n\n      for (String arg : args) {\n          arg = \"test\";\n          System.out.println(arg);\n      }\n",
+  "sources": [
+    {
+      "type": "file",
+      "path": "src/main/java/id/co/rimaubank/jambhala/service/esb/AccountInfoESB.java",
+      "language": "JAVA",
+      "line": 31,
+      "offset": 38,
+      "length": 4,
+      "code": {
+        "startLine": 29,
+        "length": 4,
+        "offset": 222,
+        "surroundingCode": "        headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_JSON_VALUE));\n        EsbAccountInfoReq esbAccountInfoReq = new EsbAccountInfoReq(customerNumber, accountNumber);\n        HttpEntity<String> request = null;\n        try {\n            request = new HttpEntity<>(new ObjectMapper().writeValueAsString(esbAccountInfoReq), headers);"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "jambhala",
+    "inspectionName": "UnusedAssignment"
+  },
+  "hash": "41a61167e7a0c7409d5cd5a10176fd6a6f697534b885b68cfa94f77d68c8b3da"
+},{
+  "tool": "Code Inspection",
+  "category": "Probable bugs",
+  "type": "Unused assignment",
+  "tags": [
+    "JAVA"
+  ],
+  "severity": "High",
+  "comment": "Variable 'request' initializer 'null' is redundant",
+  "detailsInfo": "Reports assignment values that are not used after assignment. If the assignment value is unused, it's better to remove the assignment to shorten the code and avoid redundant allocations.\n\nThe following cases are reported:\n\n* variables that are never read after assignment\n* variables that are always overwritten with a new value before being read\n* variable initializers that are redundant (for one of the two reasons above)\n\nConfigure the inspection:\n\n\nUse the **Report redundant initializers** option to report redundant initializers:\n\n\n      int getI() {\n        int i = 0; // redundant initialization\n        i = 2;\n        return i;\n      }\n\n\nUse the **Report prefix expressions that can be replaced with binary expressions** option to report cases\nwhere an `++i` expression may be replaced with `i + 1`:\n\n\n      int preInc(int value) {\n        int res = value;\n        return ++res;\n      }\n\n\nUse the **Report postfix expressions where the changed value is not used** option to report `i++` cases\nwhere the value of `i` is not used later:\n\n\n      int postInc(int value) {\n        int res = value;\n        return res++;\n      }\n\n\nUse the **Report pattern variables whose values are never used** option to report cases where the value of a pattern variable\nis overwritten before it is read:\n\n\n      if (object instanceof String s) {\n          s = \"hello\";\n          System.out.println(s);\n      }\n\n\nUse the **Report iteration parameters whose values are never used** option to report cases where the value of an iteration parameter\nof an enhanced `for` statements is overwritten before it is read:\n\n\n      for (String arg : args) {\n          arg = \"test\";\n          System.out.println(arg);\n      }\n",
+  "sources": [
+    {
+      "type": "file",
+      "path": "src/main/java/id/co/rimaubank/jambhala/service/esb/TransferEsb.java",
+      "language": "JAVA",
+      "line": 30,
+      "offset": 38,
+      "length": 4,
+      "code": {
+        "startLine": 28,
+        "length": 4,
+        "offset": 146,
+        "surroundingCode": "        HttpHeaders headers = new HttpHeaders();\n        headers.setContentType(MediaType.APPLICATION_JSON);\n        HttpEntity<String> request = null;\n\n        try {"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "jambhala",
+    "inspectionName": "UnusedAssignment"
+  },
+  "hash": "822121e48c9f0dab54ad7812fd07144e27901306f8c89fbb41f6674b26910693"
+}]}

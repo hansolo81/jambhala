@@ -1,0 +1,8 @@
+{
+  "modules": [
+    {
+      "name": "jambhala",
+      "languageLevel": 17
+    }
+  ]
+}

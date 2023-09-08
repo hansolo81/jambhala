@@ -1,0 +1,156 @@
+{"version":"3","listProblem":[{
+  "tool": "Code Inspection",
+  "category": "Qodana",
+  "type": "Sanity",
+  "tags": [
+    "Sanity"
+  ],
+  "severity": "Critical",
+  "comment": "Cannot resolve method 'getMonetaryTransaction' in 'TransactionEvent'",
+  "detailsInfo": "Reports issues essential to this file like syntax errors, unresolved methods and variables, etc...",
+  "sources": [
+    {
+      "type": "file",
+      "path": "src/main/java/id/co/rimaubank/jambhala/service/MonetaryTransactionService.java",
+      "language": "JAVA",
+      "line": 28,
+      "offset": 68,
+      "length": 22,
+      "code": {
+        "startLine": 26,
+        "length": 22,
+        "offset": 169,
+        "surroundingCode": "    @EventListener\n    public void processTransactionEvent(final TransactionEvent transactionEvent) {\n        MonetaryTransaction monetaryTransaction = transactionEvent.getMonetaryTransaction();\n        monetaryTransactionRepository.save(monetaryTransaction);\n    }"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "jambhala",
+    "inspectionName": "QodanaSanity"
+  },
+  "hash": "0724c1748e554342a829ac3d2d71c389b103308fb532dd1b89c014c9dec5dfe6"
+},{
+  "tool": "Code Inspection",
+  "category": "Qodana",
+  "type": "Sanity",
+  "tags": [
+    "Sanity"
+  ],
+  "severity": "Critical",
+  "comment": "Cannot resolve method 'getMonetaryTransaction' in 'TransactionEvent'",
+  "detailsInfo": "Reports issues essential to this file like syntax errors, unresolved methods and variables, etc...",
+  "sources": [
+    {
+      "type": "file",
+      "path": "src/main/java/id/co/rimaubank/jambhala/service/PushNotificationService.java",
+      "language": "JAVA",
+      "line": 31,
+      "offset": 68,
+      "length": 22,
+      "code": {
+        "startLine": 29,
+        "length": 22,
+        "offset": 169,
+        "surroundingCode": "    @EventListener\n    public void processTransactionEvent(final TransactionEvent transactionEvent) {\n        MonetaryTransaction monetaryTransaction = transactionEvent.getMonetaryTransaction();\n        save(PushNotification.builder()\n                .custNo(monetaryTransaction.getCustNo())"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "jambhala",
+    "inspectionName": "QodanaSanity"
+  },
+  "hash": "bdda31531f4028f5b2ae5312c0a002cc059a99e2f3ba98185bf43be6d2cde58b"
+},{
+  "tool": "Code Inspection",
+  "category": "Qodana",
+  "type": "Sanity",
+  "tags": [
+    "Sanity"
+  ],
+  "severity": "Critical",
+  "comment": "Cannot resolve method 'builder' in 'PushNotification'",
+  "detailsInfo": "Reports issues essential to this file like syntax errors, unresolved methods and variables, etc...",
+  "sources": [
+    {
+      "type": "file",
+      "path": "src/main/java/id/co/rimaubank/jambhala/service/PushNotificationService.java",
+      "language": "JAVA",
+      "line": 32,
+      "offset": 31,
+      "length": 7,
+      "code": {
+        "startLine": 30,
+        "length": 7,
+        "offset": 206,
+        "surroundingCode": "    public void processTransactionEvent(final TransactionEvent transactionEvent) {\n        MonetaryTransaction monetaryTransaction = transactionEvent.getMonetaryTransaction();\n        save(PushNotification.builder()\n                .custNo(monetaryTransaction.getCustNo())\n                .message(String.format(\"Your %s of %.2f to %s is successful.\", monetaryTransaction.getTransactionType(), monetaryTransaction.getAmount(), monetaryTransaction.getPayeeName()))"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "jambhala",
+    "inspectionName": "QodanaSanity"
+  },
+  "hash": "cd8fd651bdb761c8537cb7450637892fe16d989c8edde13b6eb516263d1f8423"
+},{
+  "tool": "Code Inspection",
+  "category": "Qodana",
+  "type": "Sanity",
+  "tags": [
+    "Sanity"
+  ],
+  "severity": "Critical",
+  "comment": "Cannot resolve method 'getTransactionType' in 'MonetaryTransaction'",
+  "detailsInfo": "Reports issues essential to this file like syntax errors, unresolved methods and variables, etc...",
+  "sources": [
+    {
+      "type": "file",
+      "path": "src/main/java/id/co/rimaubank/jambhala/service/PushNotificationService.java",
+      "language": "JAVA",
+      "line": 34,
+      "offset": 100,
+      "length": 18,
+      "code": {
+        "startLine": 32,
+        "length": 18,
+        "offset": 196,
+        "surroundingCode": "        save(PushNotification.builder()\n                .custNo(monetaryTransaction.getCustNo())\n                .message(String.format(\"Your %s of %.2f to %s is successful.\", monetaryTransaction.getTransactionType(), monetaryTransaction.getAmount(), monetaryTransaction.getPayeeName()))\n                .read(false).build());\n    }"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "jambhala",
+    "inspectionName": "QodanaSanity"
+  },
+  "hash": "d539a3441320296cb9486f39f190565c6267f53572ad676d7ead25eea6dfce64"
+},{
+  "tool": "Code Inspection",
+  "category": "Qodana",
+  "type": "Sanity",
+  "tags": [
+    "Sanity"
+  ],
+  "severity": "Critical",
+  "comment": "Cannot resolve method 'getCustNo' in 'MonetaryTransaction'",
+  "detailsInfo": "Reports issues essential to this file like syntax errors, unresolved methods and variables, etc...",
+  "sources": [
+    {
+      "type": "file",
+      "path": "src/main/java/id/co/rimaubank/jambhala/service/PushNotificationService.java",
+      "language": "JAVA",
+      "line": 33,
+      "offset": 45,
+      "length": 9,
+      "code": {
+        "startLine": 31,
+        "length": 9,
+        "offset": 177,
+        "surroundingCode": "        MonetaryTransaction monetaryTransaction = transactionEvent.getMonetaryTransaction();\n        save(PushNotification.builder()\n                .custNo(monetaryTransaction.getCustNo())\n                .message(String.format(\"Your %s of %.2f to %s is successful.\", monetaryTransaction.getTransactionType(), monetaryTransaction.getAmount(), monetaryTransaction.getPayeeName()))\n                .read(false).build());"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "jambhala",
+    "inspectionName": "QodanaSanity"
+  },
+  "hash": "ebe6f85136c2e963cf7747b7bd092195d4114fdf57e45dfde363d03bf595aab9"
+}]}

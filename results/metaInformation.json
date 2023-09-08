@@ -1,0 +1,19 @@
+{
+  "total": 3,
+  "tools inspection": {
+    "Code Inspection": 3
+  },
+  "linter": "QDJVMC",
+  "attributes": {
+    "vcs": {
+      "sarifIdea": {
+        "repositoryUri": "https://github.com/hansolo81/jambhala.git",
+        "revisionId": "b47c8b5c41f6ea8e4844ac52a7f5e2c7b400f3af",
+        "branch": "refs/heads/master"
+      }
+    },
+    "deviceId": "200820300000000-f41b-dac3-d5f1-4df903abf251",
+    "jobUrl": "https://github.com/hansolo81/jambhala/actions/runs/6123009457",
+    "repoUrl": "https://github.com/hansolo81/jambhala.git"
+  }
+}
